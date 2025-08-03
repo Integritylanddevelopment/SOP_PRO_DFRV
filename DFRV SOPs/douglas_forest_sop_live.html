@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Douglas Forest RV Resort - Employee Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Arial Black', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #2C5530;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 3px solid #7CB342;
+        }
+
+        .douglas-forest-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            background: linear-gradient(145deg, #2D4A1F, #3A5D2A);
+            padding: 25px 30px;
+            border-radius: 15px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 3px 15px rgba(255, 255, 255, 0.1);
+            border: 3px solid #1F3216;
+        }
+
+        .logo-inner {
+            background: linear-gradient(145deg, #9CCC65, #8BC34A);
+            padding: 20px 25px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: inset 0 3px 12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(255, 255, 255, 0.2);
+            position: relative;
+            border: 1px solid #7CB342;
+        }
+
+        .logo-p {
+            font-size: 4em;
+            font-weight: 900;
+            color: #1B2A0F;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 0.7;
+            margin: -8px 0 5px 0;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .douglas-text, .forest-text {
+            font-size: 1.6em;
+            font-weight: 900;
+            color: #1B2A0F;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .douglas-text {
+            margin: 0 0 -3px 0;
+        }
+
+        .forest-text {
+            margin: -3px 0 8px 0;
+        }
+
+        .rv-text {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1B2A0F;
+            letter-spacing: 3px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .header-info h1 {
+            color: #006400;
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #228B22, #006400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .header-info .subtitle {
+            color: #2F4F4F;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        /* SOP Sections */
+        .sop-section {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 3px solid #7CB342;
+        }
+
+        .emergency-contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .emergency-contact {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .emergency-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .sop-accordion {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+            border: 3px solid #7CB342;
+            margin-bottom: 25px;
+        }
+
+        .sop-header {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .sop-header:hover {
+            background: linear-gradient(135deg, #8BC34A, #7CB342);
+        }
+
+        .sop-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .sop-content.active {
+            max-height: 5000px;
+        }
+
+        .sop-body {
+            padding: 25px;
+        }
+
+        .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .sop-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .checklist-item {
+            background: #f8fff8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7CB342;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: #7CB342;
+            margin-top: 5px;
+        }
+
+        .checklist-text {
+            flex: 1;
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .item-timestamp {
+            background: rgba(124, 179, 66, 0.1);
+            color: #7CB342;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .names-section {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .name-input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .name-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #7CB342;
+        }
+
+        .name-input input, .name-input select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .name-input input:focus, .name-input select:focus {
+            outline: none;
+            border-color: #7CB342;
+            box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.1);
+        }
+
+        .incident-media {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .media-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #8BC34A, #7CB342);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 179, 66, 0.3);
+        }
+
+        .btn-emergency {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            animation: emergencyPulse 2s infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+        }
+
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .completion-status {
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #7CB342;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #7CB342, #8BC34A);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .sop-signature-section {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+
+        .mini-canvas {
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            width: 100%;
+            height: 120px;
+            cursor: crosshair;
+            background: white;
+            margin: 15px 0;
+        }
+
+        .mini-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .timestamp {
+            text-align: center;
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .sop-header {
+                padding: 15px;
+            }
+
+            .sop-header h3 {
+                font-size: 1em;
+            }
+
+            .sop-body {
+                padding: 20px;
+            }
+
+            .checklist-item {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .checklist-item input[type="checkbox"] {
+                transform: scale(1.2);
+                margin-right: 12px;
+            }
+
+            .media-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .emergency-contacts {
+                grid-template-columns: 1fr;
+            }
+
+            .name-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                min-width: 120px;
+                margin: 5px 0;
+            }
+
+            .item-timestamp {
+                position: static;
+                margin-top: 8px;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="douglas-forest-logo">
+                    <div class="logo-container">
+                        <div class="logo-inner">
+                            <div class="logo-p">P</div>
+                            <div class="douglas-text">DOUGLAS</div>
+                            <div class="forest-text">FOREST</div>
+                            <div class="rv-text">RV RESORT</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-info">
+                    <h1>🚨 Standard Operating Procedures</h1>
+                    <div class="subtitle">Emergency Response & Incident Management</div>
+                    <div style="color: #7f8c8d; font-size: 1em; margin-top: 5px;">106 Douglas Road, Webster, MA 01570</div>
+                    <div style="color: #7f8c8d; font-size: 0.9em;">📞 (508) 943-4440 | 🌐 douglasforestrv.com</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOP Section -->
+        <div class="sop-section" id="sop-section">
+            <div class="handbook-section">
+                <!-- Emergency Contacts -->
+                <div class="emergency-contacts">
+                    <a href="#" onclick="callEmergency('911')" class="emergency-contact">
+                        🚨 Emergency 911
+                    </a>
+                    <a href="#" onclick="callEmergency('Fire Department: 508-555-1234')" class="emergency-contact">
+                        🚒 Fire Department<br>508-555-1234
+                    </a>
+                    <a href="#" onclick="callEmergency('Police Department: 508-555-5678')" class="emergency-contact">
+                        👮 Police Department<br>508-555-5678
+                    </a>
+                    <a href="#" onclick="callEmergency('Hospital: 508-555-9999')" class="emergency-contact">
+                        🏥 Hospital<br>508-555-9999
+                    </a>
+                </div>
+
+                <!-- SOP 1: Medical Emergency -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🚨 SOP 1: Medical Emergency or Injury</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Injured Person</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Witness 1</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>First Responder</label>
+                                        <input type="text" placeholder="EMS/Fire personnel name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Incident Severity</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Severity</option>
+                                            <option value="minor">Minor Injury</option>
+                                            <option value="moderate">Moderate Injury</option>
+                                            <option value="severe">Severe/Critical</option>
+                                            <option value="life-threatening">Life Threatening</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop1-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/8 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">✅ Check the scene for safety. Do not enter unsafe areas.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>Call 911 immediately if:</strong> Person is unconscious, bleeding heavily, not breathing, suspected head/neck/spinal injury, chest pain, seizure, or possible stroke.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🩹 Provide basic aid if you are certified and it's safe to do so.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛑 Keep the guest still and calm. Do not allow them to walk or move if injured.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏃 Send another staff or volunteer to direct EMS to the location.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 Notify the GM and begin completing the Incident Report.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏥 If injury is minor and does not require EMS: Offer first aid if certified, complete Incident Report, monitor guest.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🧽 Clean and disinfect any biohazard (blood, vomit, etc.) only after report is complete and safe to do so.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Medical Emergency SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop1"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop1-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 2: Criminal Incident -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🚨 SOP 2: Criminal Incident (Assault, Theft, Harassment, Vandalism)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Victim/Complainant</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Suspect (if known)</label>
+                                        <input type="text" placeholder="Full name or description" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Witness</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Crime Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Crime Type</option>
+                                            <option value="assault">Assault</option>
+                                            <option value="theft">Theft</option>
+                                            <option value="harassment">Harassment</option>
+                                            <option value="vandalism">Vandalism</option>
+                                            <option value="domestic">Domestic Violence</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop2-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/10 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>Call 911 immediately</strong> if violence is occurring or threat is imminent.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛡️ <strong>Ensure your safety first.</strong> Do not confront suspects or put yourself at risk.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Contact police immediately.</strong> Do not delay reporting criminal activity.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👀 <strong>Observe and document:</strong> suspect description, clothing, vehicle info, direction of travel.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 <strong>Secure the scene.</strong> Do not allow contamination of evidence. Use barriers if available.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 <strong>Get witness statements</strong> and contact information. Write down exact quotes.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📷 <strong>Document evidence:</strong> Take photos of damage, scene, any physical evidence.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🎥 <strong>Check security cameras</strong> if available. Preserve footage immediately.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 <strong>Notify GM and complete incident report.</strong> Include all details and timeline.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👮 <strong>Cooperate fully with police.</strong> Provide all documentation and assist with investigation.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Criminal Incident SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop2"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop2-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 3: Vehicle Accident -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🚗 SOP 3: Vehicle Accident or Property Damage</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Driver 1</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Driver 2 (if applicable)</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Property Owner</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Damage Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Damage Type</option>
+                                            <option value="vehicle-only">Vehicle Only</option>
+                                            <option value="property-only">Property Only</option>
+                                            <option value="both">Vehicle & Property</option>
+                                            <option value="injury">With Injury</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop3-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/12 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>Call 911 immediately</strong> if there are injuries or major damage requiring emergency response.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛑 <strong>Secure the scene.</strong> Use cones or barriers to prevent further accidents or traffic hazards.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🩺 <strong>Check for injuries.</strong> Provide first aid if trained and safe to do so.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📷 <strong>Take photos from multiple angles:</strong> vehicles, damage, scene overview, license plates.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📋 <strong>Collect driver information:</strong> license, insurance, registration from all parties involved.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👀 <strong>Get witness information:</strong> names, phone numbers, and statements from anyone who saw accident.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Call police</strong> if damage exceeds $1000, injuries occurred, or requested by any party.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 <strong>Do not admit fault</strong> or make statements about who caused accident. Document facts only.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 <strong>Notify GM and our insurance company</strong> immediately with all collected information.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🗒️ <strong>Document road/weather conditions:</strong> note if wet, icy, construction, poor lighting, etc.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚧 <strong>Check for property damage:</strong> signs, fencing, landscaping, utilities on resort property.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 <strong>Complete detailed incident report</strong> with all information, photos, and timeline.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Vehicle Accident SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop3"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop3-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 4: Missing Person -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>👤 SOP 4: Missing Person (Adult or Child)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Missing Person</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Reporting Person</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Last Seen By</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Age Group</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Age Group</option>
+                                            <option value="child">Child (Under 18)</option>
+                                            <option value="adult">Adult (18-65)</option>
+                                            <option value="elderly">Elderly (Over 65)</option>
+                                            <option value="special-needs">Special Needs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop4-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/11 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>IMMEDIATE:</strong> Call 911 if missing person is a child under 12 or vulnerable adult.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">⏰ <strong>Get detailed information:</strong> when/where last seen, what wearing, medical conditions, medications.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Get recent photo</strong> from family/friends if available. Note height, weight, distinguishing features.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🔍 <strong>Begin immediate search</strong> of common areas: bathrooms, pool, playground, office, store.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📢 <strong>Alert all staff</strong> via radio/phone to be on lookout. Provide description and last known location.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚪 <strong>Check all entrances/exits.</strong> Ask gate attendants, review security cameras if available.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚗 <strong>Check vehicles and RVs</strong> where person was staying. Look for unlocked vehicles.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👥 <strong>Organize systematic search</strong> with other guests/volunteers if safe and appropriate.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 <strong>Call 911</strong> if not found within 30 minutes (sooner for children/vulnerable adults).</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🌊 <strong>Check water areas</strong> thoroughly: pond, pool, hot tub - water emergencies are life threatening.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 <strong>Document all search efforts</strong> and timeline in detailed incident report for authorities.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Missing Person SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop4"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop4-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue with remaining SOPs... -->
+                <!-- I'll add a few more key ones to demonstrate the pattern -->
+
+                <!-- SOP 5: Disturbances -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🔊 SOP 5: Disturbances (Fights, Noise, Intoxication)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Primary Individual</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Secondary Individual</label>
+                                        <input type="text" placeholder="Full name (if applicable)" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Complainant</label>
+                                        <input type="text" placeholder="Person reporting disturbance" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Disturbance Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Type</option>
+                                            <option value="noise">Noise Complaint</option>
+                                            <option value="fight">Physical Fight</option>
+                                            <option value="intoxication">Intoxication</option>
+                                            <option value="argument">Verbal Argument</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop5-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/9 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>Call 911</strong> immediately if violence is occurring or weapons are involved.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛡️ <strong>Assess situation from safe distance.</strong> Do not confront intoxicated or violent individuals alone.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🗣️ <strong>Attempt verbal de-escalation</strong> if safe to do so. Stay calm, professional, non-threatening.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👥 <strong>Clear other guests</strong> from immediate area for their safety and to reduce audience effect.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Call police</strong> if situation cannot be resolved peacefully or escalates further.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📹 <strong>Document everything:</strong> what was said, actions taken, witness information, damage.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🔊 <strong>For noise complaints:</strong> Politely inform guests of quiet hours and resort policies.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">⚠️ <strong>Consider ejection</strong> from property if behavior continues or serious policy violations occurred.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 <strong>Notify GM</strong> and complete incident report with all details and follow-up actions needed.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Disturbance SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop5"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop5-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 6: Fire Emergency -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🔥 SOP 6: Fire, Smoke, or Explosion</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>🔥 Fire Emergency Details</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Location of Fire</label>
+                                        <input type="text" placeholder="Specific location/site number" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Person Reporting</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Affected Persons</label>
+                                        <input type="text" placeholder="Names of people in area" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Fire Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Fire Type</option>
+                                            <option value="structure">Structure Fire</option>
+                                            <option value="vehicle">Vehicle Fire</option>
+                                            <option value="brush">Brush/Wildfire</option>
+                                            <option value="propane">Propane/Gas</option>
+                                            <option value="electrical">Electrical</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop6-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/8 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>CALL 911 IMMEDIATELY</strong> - Every second counts in fire emergencies.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📢 <strong>EVACUATE</strong> all persons from immediate danger area. Sound alarm if available.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🧯 Use fire extinguisher ONLY if fire is small and you have clear escape route.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏃 Assist with evacuation. Help elderly, disabled, or children evacuate first.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 Close doors behind you to slow fire spread. Do not use elevators.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚒 Meet fire department at entrance and direct them to fire location.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📊 Conduct headcount at designated assembly area. Report missing persons to fire department.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">⛽ Turn off utilities (gas, electricity) if safe to do so and trained to do it.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Fire Emergency SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop6"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop6-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add remaining SOPs (7-10) with similar structure -->
+                <!-- SOP 7: Hazardous Conditions -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>⚠️ SOP 7: Hazardous Conditions or Utility Failure</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>⚠️ Hazard Information</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Hazard Location</label>
+                                        <input type="text" placeholder="Specific location/area" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Person Reporting</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Affected Persons</label>
+                                        <input type="text" placeholder="Names of people affected" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Hazard Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Hazard Type</option>
+                                            <option value="electrical">Electrical</option>
+                                            <option value="gas-leak">Gas Leak</option>
+                                            <option value="chemical-spill">Chemical Spill</option>
+                                            <option value="structural">Structural Damage</option>
+                                            <option value="water-utility">Water/Sewer</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop7-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/8 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">⚡ <strong>Identify hazard type:</strong> electrical, chemical spill, gas leak, structural damage.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 <strong>Secure area immediately.</strong> Prevent access by guests and staff using barriers/cones.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 Call appropriate emergency services: 911 for life threat, utility companies for service issues.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏃 Evacuate if necessary. Move people upwind from chemical spills, away from electrical hazards.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 Notify utility companies: Electric (1-800-XXX), Gas (1-800-XXX), Water dept.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛑 Turn off utilities if safe and trained to do so. Do not enter flooded areas with electricity.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🧯 Ventilate area if gas leak suspected. No smoking, sparks, or electrical switches.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 Document conditions, actions taken, and timeline in detailed incident report.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Hazardous Conditions SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop7"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop7-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 8: Sexual Assault -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🚨 SOP 8: Sexual Assault or Abuse</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 Sensitive Information - Handle with Extreme Care</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Victim (if willing to provide)</label>
+                                        <input type="text" placeholder="First name only if needed" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Person Reporting</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Location of Incident</label>
+                                        <input type="text" placeholder="Specific location" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Incident Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Type</option>
+                                            <option value="sexual-assault">Sexual Assault</option>
+                                            <option value="sexual-harassment">Sexual Harassment</option>
+                                            <option value="child-abuse">Child Abuse</option>
+                                            <option value="domestic-violence">Domestic Violence</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation - CONFIDENTIAL</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop8-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/9 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>CALL 911 IMMEDIATELY</strong> - Sexual assault is a serious crime requiring immediate police response.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🤝 <strong>Support the victim.</strong> Believe them, listen without judgment, ensure their immediate safety.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏥 <strong>Medical attention:</strong> Encourage victim to seek medical care even if no visible injuries.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 <strong>Preserve evidence:</strong> Do not clean, move, or touch anything. Secure the scene.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🔒 <strong>Confidentiality:</strong> Only share information with police, management, and those with need to know.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 Provide victim with crisis resources: RAINN Hotline 1-800-656-4673, local victim services.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👮 <strong>Cooperate with police</strong> fully. Provide all requested information and documentation.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 Notify GM/Owner immediately. This requires highest level management involvement.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 Document everything carefully. Use victim's exact words. Store report securely.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Sexual Assault SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop8"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop8-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 9: Severe Weather -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>🌪️ SOP 9: Severe Weather or Natural Disaster</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>🌪️ Weather Emergency Details</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Weather Event Type</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Weather Type</option>
+                                            <option value="tornado">Tornado Warning</option>
+                                            <option value="severe-thunderstorm">Severe Thunderstorm</option>
+                                            <option value="flooding">Flooding</option>
+                                            <option value="ice-storm">Ice Storm</option>
+                                            <option value="high-winds">High Winds</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Affected Areas</label>
+                                        <input type="text" placeholder="List affected site numbers/areas" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Estimated Guests Affected</label>
+                                        <input type="text" placeholder="Number of people/families" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Shelter Location</label>
+                                        <input type="text" placeholder="Designated safe area" onchange="timestampField(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Weather Damage Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop9-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/10 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📻 <strong>Monitor weather alerts</strong> via NOAA Weather Radio, apps, or emergency broadcasts.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📢 <strong>Alert all guests immediately</strong> via loudspeaker, door-to-door, or emergency notification system.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🏠 <strong>Direct guests to shelter:</strong> Bathhouse, office, or lowest floor of sturdy buildings.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🌪️ <strong>Tornado protocol:</strong> Get to interior room, lowest floor, away from windows. Crouch low, cover head.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">💨 <strong>High wind protocol:</strong> Secure loose objects, stay away from trees, avoid RVs/tents.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🌊 <strong>Flooding protocol:</strong> Move to higher ground, avoid driving through water, turn off utilities.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📊 <strong>Account for all guests</strong> during and after event. Conduct headcount at shelter.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>Call 911</strong> for injuries, trapped persons, or major damage requiring emergency response.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Communicate with authorities:</strong> Emergency management, utility companies, insurance.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📷 <strong>Document all damage</strong> with photos/video for insurance claims. Do not enter unsafe areas.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Severe Weather SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop9"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop9-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 10: Death on Property -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleAccordion(this)">
+                        <h3>💀 SOP 10: Death on Property</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>💀 Death Incident Information - CONFIDENTIAL</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Deceased Person</label>
+                                        <input type="text" placeholder="Full name if known" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Person Discovering</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Location of Discovery</label>
+                                        <input type="text" placeholder="Specific location/site number" onchange="timestampField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Circumstances</label>
+                                        <select onchange="timestampField(this)">
+                                            <option value="">Select Circumstances</option>
+                                            <option value="natural">Natural/Medical</option>
+                                            <option value="accident">Accidental</option>
+                                            <option value="suspicious">Suspicious</option>
+                                            <option value="unknown">Unknown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Scene Documentation - DO NOT DISTURB SCENE</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="demoTakePhoto()">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="demoRecordAudio()">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="demoUploadDocument()">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="demoNotifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop10-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/12 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚨 <strong>CALL 911 IMMEDIATELY</strong> - All deaths must be reported to authorities regardless of apparent cause.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🩺 <strong>Check for signs of life</strong> if safe to do so. Do not assume death - begin CPR if trained.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🚫 <strong>DO NOT MOVE THE BODY</strong> or disturb the scene. This is now a potential crime scene.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🛑 <strong>Secure the scene immediately.</strong> Use barriers, tape, or staff to prevent contamination.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👥 <strong>Clear all guests/staff</strong> from immediate area. Provide privacy and preserve dignity.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📝 <strong>Document the scene</strong> with photos from multiple angles BEFORE authorities arrive.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👮 <strong>Cooperate fully with police</strong> and coroner. Provide all requested information.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">👨‍👩‍👧‍👦 <strong>Notify next of kin</strong> if known, or assist authorities in identification/notification.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📞 <strong>Notify GM/Owner immediately.</strong> This requires highest level management response.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📱 <strong>Contact insurance company</strong> and legal counsel as directed by management.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">🤐 <strong>Maintain strict confidentiality.</strong> Do not discuss with guests, media, or unauthorized persons.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateProgress(this)">
+                                <div class="checklist-text">📋 <strong>Complete detailed incident report</strong> with exact timeline, all persons present, and circumstances.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Death on Property SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop10"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearMiniSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveMiniSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop10-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let sopSignatures = {};
+
+        // Toggle accordion function
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            // Close all other accordions
+            document.querySelectorAll('.sop-header').forEach(h => {
+                if (h !== header) {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                    h.querySelector('.toggle-icon').style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current accordion
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                content.style.maxHeight = '0';
+            }
+        }
+
+        // Progress tracking
+        function updateProgress(checkbox) {
+            const sopBody = checkbox.closest('.sop-body');
+            const checkboxes = sopBody.querySelectorAll('input[type="checkbox"]');
+            const progressText = sopBody.querySelector('.progress-text');
+            const progressFill = sopBody.querySelector('.progress-fill');
+            const timestamp = checkbox.closest('.checklist-item').querySelector('.item-timestamp');
+            
+            const total = checkboxes.length;
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = (completed / total) * 100;
+            
+            // Update progress display
+            progressText.textContent = `${completed}/${total} completed`;
+            progressFill.style.width = `${percentage}%`;
+            
+            // Show timestamp when checked
+            if (checkbox.checked) {
+                timestamp.textContent = `Completed: ${new Date().toLocaleString()}`;
+                timestamp.style.display = 'block';
+                showNotification('✅ Step completed!', 'success');
+            } else {
+                timestamp.style.display = 'none';
+            }
+        }
+
+        // Timestamp field function
+        function timestampField(input) {
+            if (input.value.trim() !== '') {
+                let timestampDiv = input.parentElement.querySelector('.timestamp-badge');
+                if (!timestampDiv) {
+                    timestampDiv = document.createElement('div');
+                    timestampDiv.className = 'timestamp-badge';
+                    timestampDiv.style.cssText = `
+                        background: rgba(124, 179, 66, 0.1);
+                        color: #7CB342;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-size: 0.8em;
+                        margin-top: 5px;
+                    `;
+                    input.parentElement.appendChild(timestampDiv);
+                }
+                const now = new Date();
+                timestampDiv.textContent = `Entered: ${now.toLocaleString()}`;
+                
+                showNotification(`📝 Field updated: ${input.placeholder || 'Data entered'}`, 'success');
+            }
