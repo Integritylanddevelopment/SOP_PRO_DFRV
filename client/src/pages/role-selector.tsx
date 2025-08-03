@@ -2,13 +2,16 @@ import { Building } from "lucide-react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { DevBypass } from "@/components/dev-bypass";
 
 export default function RoleSelector() {
   const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
-      <Card className="w-full max-w-md shadow-lg">
+      <div className="w-full max-w-md space-y-6">
+        <DevBypass />
+        <Card className="w-full shadow-lg">
         <CardContent className="p-8">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
@@ -60,6 +63,7 @@ export default function RoleSelector() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
