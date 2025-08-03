@@ -3,9 +3,11 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DevBypass } from "@/components/dev-bypass";
+import { getCompanyConfig } from "@/lib/company-config";
 
 export default function RoleSelector() {
   const [, setLocation] = useLocation();
+  const companyConfig = getCompanyConfig();
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
@@ -17,8 +19,9 @@ export default function RoleSelector() {
             <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <Building className="text-white text-2xl" size={32} />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 mb-2">Employment Hub</h1>
-            <p className="text-slate-600">Select your role to continue</p>
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">Workflow Pro</h1>
+            <p className="text-slate-600">{companyConfig.name}</p>
+            <p className="text-sm text-slate-500">Select your role to continue</p>
           </div>
           
           <div className="space-y-4">

@@ -1,0 +1,44 @@
+{
+  "industry": "Food Service",
+  "handbook": {
+    "sections": [
+      {
+        "title": "Food Safety & Sanitation",
+        "content": "Proper food handling, temperature control, and sanitation procedures...",
+        "requiresSignature": true
+      },
+      {
+        "title": "Customer Service Excellence",
+        "content": "Creating memorable dining experiences through exceptional service...",
+        "requiresSignature": true
+      },
+      {
+        "title": "Kitchen Safety Procedures",
+        "content": "Preventing accidents and injuries in the kitchen environment...",
+        "requiresSignature": true
+      }
+    ]
+  },
+  "sops": [
+    {
+      "title": "Food Temperature Monitoring",
+      "category": "Food Safety",
+      "steps": [
+        {"title": "Check refrigerator temperatures (≤40°F)", "required": true},
+        {"title": "Check freezer temperatures (≤0°F)", "required": true},
+        {"title": "Record temperatures in log", "required": true},
+        {"title": "Report any temperature violations", "required": true}
+      ]
+    },
+    {
+      "title": "Table Service Procedure", 
+      "category": "Customer Service",
+      "steps": [
+        {"title": "Greet customers within 2 minutes", "required": true},
+        {"title": "Take drink orders promptly", "required": true},
+        {"title": "Explain menu specials", "required": false},
+        {"title": "Check on table every 10 minutes", "required": true}
+      ]
+    }
+  ]
+}

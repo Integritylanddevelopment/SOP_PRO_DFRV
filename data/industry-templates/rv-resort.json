@@ -1,0 +1,60 @@
+{
+  "industry": "Hospitality - RV Resort",
+  "handbook": {
+    "sections": [
+      {
+        "title": "Welcome & Company Culture",
+        "content": "Welcome to our RV resort family! Our mission is to provide exceptional outdoor hospitality...",
+        "requiresSignature": true
+      },
+      {
+        "title": "Guest Service Standards", 
+        "content": "Guest satisfaction is our top priority. All interactions should be friendly, professional...",
+        "requiresSignature": true
+      },
+      {
+        "title": "Safety & Emergency Procedures",
+        "content": "Safety protocols for guest and employee protection, emergency contacts and procedures...",
+        "requiresSignature": true
+      },
+      {
+        "title": "Maintenance & Grounds Keeping",
+        "content": "Standards for maintaining resort facilities, landscaping, and common areas...",
+        "requiresSignature": false
+      }
+    ]
+  },
+  "sops": [
+    {
+      "title": "Guest Check-in Process",
+      "category": "Front Desk Operations",
+      "steps": [
+        {"title": "Greet guest and verify reservation", "required": true},
+        {"title": "Check ID and collect payment", "required": true},
+        {"title": "Explain resort amenities and rules", "required": true},
+        {"title": "Provide site map and access cards", "required": true}
+      ]
+    },
+    {
+      "title": "Pool Chemical Testing & Maintenance",
+      "category": "Pool Maintenance", 
+      "steps": [
+        {"title": "Test chlorine levels (1.0-3.0 ppm)", "required": true},
+        {"title": "Test pH levels (7.2-7.6)", "required": true},
+        {"title": "Record readings in log book", "required": true},
+        {"title": "Add chemicals if needed", "required": false},
+        {"title": "Clean skimmer baskets", "required": true}
+      ]
+    },
+    {
+      "title": "Grounds Inspection Walkthrough",
+      "category": "Maintenance",
+      "steps": [
+        {"title": "Check all common areas for cleanliness", "required": true},
+        {"title": "Inspect restroom facilities", "required": true},
+        {"title": "Check playground equipment safety", "required": true},
+        {"title": "Report any maintenance issues", "required": true}
+      ]
+    }
+  ]
+}

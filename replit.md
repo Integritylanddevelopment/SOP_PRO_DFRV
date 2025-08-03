@@ -1,8 +1,15 @@
-# Employment Hub
+# Workflow Pro - White-Label Employment Management System
 
 ## Overview
 
-Employment Hub is a comprehensive employee management and onboarding system designed for multi-tenant white-label deployment. The application facilitates complete employee lifecycle management from initial registration through daily operational tasks, with role-based access controls for employees, managers, and business owners.
+Workflow Pro is a comprehensive white-label employee management and onboarding system designed for easy customization and deployment across multiple companies. The application facilitates complete employee lifecycle management from initial registration through daily operational tasks, with role-based access controls for employees, managers, and business owners.
+
+**White-Label Features:**
+- Company-specific branding and theming
+- Customizable handbook content per company
+- Industry-specific SOP templates
+- Multi-tenant database architecture
+- Easy fork-and-deploy workflow for new companies
 
 The system provides digital employee handbook management with signature tracking, Standard Operating Procedures (SOPs) with step-by-step execution tracking, task assignment and management, incident reporting, and comprehensive dashboard analytics. Built as a full-stack web application with modern React frontend and Express.js backend, it supports multiple companies through a white-label architecture.
 

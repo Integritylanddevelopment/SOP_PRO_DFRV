@@ -1,0 +1,33 @@
+{
+  "company": {
+    "name": "Douglas Forest RV Resort",
+    "slug": "douglas-forest-rv",
+    "description": "Premier RV resort in the heart of the Pacific Northwest",
+    "website": "https://douglasforestrv.com",
+    "industry": "Hospitality - RV Resort",
+    "logo": "/assets/company-logo.png"
+  },
+  "branding": {
+    "primary": "hsl(30, 25%, 54%)",
+    "secondary": "hsl(90, 50%, 20%)",
+    "accent": "hsl(35, 30%, 85%)",
+    "colors": {
+      "tan": "#8B7355",
+      "forestGreen": "#2D5016",
+      "lightTan": "#D4C4A0"
+    }
+  },
+  "features": {
+    "handbook": true,
+    "sops": true,
+    "tasks": true,
+    "incidents": true,
+    "analytics": true,
+    "whiteLabel": true
+  },
+  "devMode": {
+    "enabled": true,
+    "bypassAuth": true,
+    "seedData": true
+  }
+}
