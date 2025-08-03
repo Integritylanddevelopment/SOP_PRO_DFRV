@@ -1,19 +1,21 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
   insertUserSchema, insertHandbookSectionSchema, insertUserSignatureSchema,
   insertSopSchema, insertSopExecutionSchema, insertSopStepCompletionSchema,
-  insertTaskSchema, insertIncidentSchema, insertNotificationSchema
+  insertTaskSchema, insertIncidentSchema, insertNotificationSchema,
+  type User
 } from "@shared/schema";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { ObjectStorageService } from "./objectStorage";
+import "./types";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // Middleware for authentication
-const authenticateToken = async (req: any, res: any, next: any) => {
+const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -22,7 +24,7 @@ const authenticateToken = async (req: any, res: any, next: any) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
     const user = await storage.getUser(decoded.userId);
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
@@ -36,12 +38,20 @@ const authenticateToken = async (req: any, res: any, next: any) => {
 
 // Role-based middleware
 const requireRole = (roles: string[]) => {
-  return (req: any, res: any, next: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({ message: 'Insufficient permissions' });
     }
     next();
   };
+};
+
+// Helper to ensure user is authenticated
+const getAuthenticatedUser = (req: Request): User => {
+  if (!req.user) {
+    throw new Error('User not authenticated');
+  }
+  return req.user;
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {

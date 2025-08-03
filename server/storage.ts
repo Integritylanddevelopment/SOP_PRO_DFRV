@@ -87,7 +87,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCompany(company: InsertCompany): Promise<Company> {
-    const [newCompany] = await db.insert(companies).values(company).returning();
+    const [newCompany] = await db.insert(companies).values([company]).returning();
     return newCompany;
   }
 
@@ -103,7 +103,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const [newUser] = await db.insert(users).values(user).returning();
+    const [newUser] = await db.insert(users).values([user]).returning();
     return newUser;
   }
 
@@ -143,7 +143,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createHandbookSection(section: InsertHandbookSection): Promise<HandbookSection> {
-    const [newSection] = await db.insert(handbookSections).values(section).returning();
+    const [newSection] = await db.insert(handbookSections).values([section]).returning();
     return newSection;
   }
 
@@ -153,7 +153,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUserSignature(signature: InsertUserSignature): Promise<UserSignature> {
-    const [newSignature] = await db.insert(userSignatures).values(signature).returning();
+    const [newSignature] = await db.insert(userSignatures).values([signature]).returning();
     return newSignature;
   }
 
@@ -180,7 +180,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createSop(sop: InsertSop): Promise<Sop> {
-    const [newSop] = await db.insert(sops).values(sop).returning();
+    const [newSop] = await db.insert(sops).values([sop]).returning();
     return newSop;
   }
 
@@ -191,7 +191,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createSopExecution(execution: InsertSopExecution): Promise<SopExecution> {
-    const [newExecution] = await db.insert(sopExecutions).values(execution).returning();
+    const [newExecution] = await db.insert(sopExecutions).values([execution]).returning();
     return newExecution;
   }
 
@@ -221,7 +221,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createSopStepCompletion(completion: InsertSopStepCompletion): Promise<SopStepCompletion> {
-    const [newCompletion] = await db.insert(sopStepCompletions).values(completion).returning();
+    const [newCompletion] = await db.insert(sopStepCompletions).values([completion]).returning();
     return newCompletion;
   }
 
@@ -249,7 +249,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTask(task: InsertTask): Promise<Task> {
-    const [newTask] = await db.insert(tasks).values(task).returning();
+    const [newTask] = await db.insert(tasks).values([task]).returning();
     return newTask;
   }
 
@@ -285,7 +285,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createIncident(incident: InsertIncident): Promise<Incident> {
-    const [newIncident] = await db.insert(incidents).values(incident).returning();
+    const [newIncident] = await db.insert(incidents).values([incident]).returning();
     return newIncident;
   }
 
@@ -308,7 +308,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createNotification(notification: InsertNotification): Promise<Notification> {
-    const [newNotification] = await db.insert(notifications).values(notification).returning();
+    const [newNotification] = await db.insert(notifications).values([notification]).returning();
     return newNotification;
   }
 

@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Douglas Forest RV Resort - Digital Employee Handbook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Arial Black', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #2C5530;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 3px solid #7CB342;
+        }
+
+        .douglas-forest-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            background: linear-gradient(145deg, #2D4A1F, #3A5D2A);
+            padding: 25px 30px;
+            border-radius: 15px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 3px 15px rgba(255, 255, 255, 0.1);
+            border: 3px solid #1F3216;
+        }
+
+        .logo-inner {
+            background: linear-gradient(145deg, #9CCC65, #8BC34A);
+            padding: 20px 25px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: inset 0 3px 12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(255, 255, 255, 0.2);
+            position: relative;
+            border: 1px solid #7CB342;
+        }
+
+        .logo-p {
+            font-size: 4em;
+            font-weight: 900;
+            color: #1B2A0F;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 0.7;
+            margin: -8px 0 5px 0;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .douglas-text, .forest-text {
+            font-size: 1.6em;
+            font-weight: 900;
+            color: #1B2A0F;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .douglas-text {
+            margin: 0 0 -3px 0;
+        }
+
+        .forest-text {
+            margin: -3px 0 8px 0;
+        }
+
+        .rv-text {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1B2A0F;
+            letter-spacing: 3px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .header-info h1 {
+            color: #006400;
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #228B22, #006400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .header-info .subtitle {
+            color: #2F4F4F;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .handbook-section {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 3px solid #7CB342;
+        }
+
+        .progress-overview {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #7CB342, #8BC34A);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .section-accordion {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #7CB342;
+            margin-bottom: 15px;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #8BC34A, #7CB342);
+        }
+
+        .section-header.completed {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        .section-header.completed::after {
+            content: '✓';
+            position: absolute;
+            right: 60px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .section-content.active {
+            max-height: 5000px;
+        }
+
+        .section-body {
+            padding: 25px;
+        }
+
+        .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .subsection {
+            background: #f8fff8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7CB342;
+            position: relative;
+        }
+
+        .subsection-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .subsection-checkbox {
+            transform: scale(1.3);
+            accent-color: #7CB342;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .subsection-title {
+            font-weight: bold;
+            color: #006400;
+            font-size: 1.1em;
+            flex: 1;
+        }
+
+        .subsection-content {
+            margin-left: 35px;
+            color: #34495e;
+            line-height: 1.7;
+        }
+
+        .timestamp {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(124, 179, 66, 0.1);
+            color: #7CB342;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .timestamp.show {
+            display: block;
+        }
+
+        .completion-summary {
+            background: #e8f5e8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            border: 2px solid #4CAF50;
+        }
+
+        .final-signature-section {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+            display: none;
+        }
+
+        .final-signature-section.show {
+            display: block;
+        }
+
+        .signature-canvas {
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            width: 100%;
+            height: 150px;
+            cursor: crosshair;
+            background: white;
+            margin: 15px 0;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #8BC34A, #7CB342);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 179, 66, 0.3);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+            box-shadow: 0 5px 15px rgba(124, 179, 66, 0.3);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .nav-tab:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #bdc3c7;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .employee-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: white;
+            padding: 0 8px;
+            font-size: 0.9em;
+            color: #7CB342;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #7CB342;
+            box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.1);
+        }
+
+        .photo-capture {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .photo-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid #7CB342;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+            background: #ecf0f1;
+        }
+
+        .photo-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px dashed #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 3em;
+            color: #bdc3c7;
+            background: white;
+        }
+
+        .emergency-contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .emergency-contact {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .emergency-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .sop-accordion {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+            border: 3px solid #7CB342;
+            margin-bottom: 25px;
+        }
+
+        .sop-header {
+            background: linear-gradient(135deg, #7CB342, #689F38);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .sop-header:hover {
+            background: linear-gradient(135deg, #8BC34A, #7CB342);
+        }
+
+        .sop-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .sop-content.active {
+            max-height: 5000px;
+        }
+
+        .sop-body {
+            padding: 25px;
+        }
+
+        .names-section {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .name-input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .name-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #7CB342;
+        }
+
+        .name-input input, .name-input select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .name-input input:focus, .name-input select:focus {
+            outline: none;
+            border-color: #7CB342;
+            box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.1);
+        }
+
+        .incident-media {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .media-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .checklist-item {
+            background: #f8fff8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7CB342;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: #7CB342;
+            margin-top: 5px;
+        }
+
+        .checklist-text {
+            flex: 1;
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .item-timestamp {
+            background: rgba(124, 179, 66, 0.1);
+            color: #7CB342;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .sop-signature-section {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+
+        .mini-canvas {
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            width: 100%;
+            height: 120px;
+            cursor: crosshair;
+            background: white;
+            margin: 15px 0;
+        }
+
+        .mini-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .btn-emergency {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            animation: emergencyPulse 2s infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #7CB342, #8BC34A);
+        }
+
+        .notification.warning {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .section-header {
+                padding: 15px;
+            }
+
+            .section-body {
+                padding: 20px;
+            }
+
+            .subsection {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .timestamp {
+                position: static;
+                margin-top: 10px;
+                display: block;
+                text-align: right;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="douglas-forest-logo">
+                <div class="logo-container">
+                    <div class="logo-inner">
+                        <div class="logo-p">P</div>
+                        <div class="douglas-text">DOUGLAS</div>
+                        <div class="forest-text">FOREST</div>
+                        <div class="rv-text">RV RESORT</div>
+                    </div>
+        </div>
+
+        <!-- SOPs Tab -->
+        <div id="sops-content" class="tab-content">
+            <div class="handbook-section">
+                <h2 style="text-align: center; color: #7CB342; margin-bottom: 30px;">🚨 Standard Operating Procedures</h2>
+                
+                <!-- Emergency Contacts Section -->
+                <div class="emergency-contacts">
+                    <a href="#" onclick="callEmergency('911')" class="emergency-contact">
+                        🚨 Emergency 911
+                    </a>
+                    <a href="#" onclick="callEmergency('Fire Department: 508-555-1234')" class="emergency-contact">
+                        🚒 Fire Department<br>508-555-1234
+                    </a>
+                    <a href="#" onclick="callEmergency('Police Department: 508-555-5678')" class="emergency-contact">
+                        👮 Police Department<br>508-555-5678
+                    </a>
+                    <a href="#" onclick="callEmergency('Hospital: 508-555-9999')" class="emergency-contact">
+                        🏥 Hospital<br>508-555-9999
+                    </a>
+                </div>
+
+                <!-- Manager Bypass -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <button class="btn btn-secondary" onclick="sopManagerBypass()" style="background: #ff9800;">🔓 Manager Bypass - Unlock SOPs</button>
+                </div>
+
+                <!-- SOP 1: Medical Emergency -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleSOP(this)">
+                        <h3>🚨 SOP 1: Medical Emergency or Injury</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Injured Person *</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Witness 1</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>First Responder</label>
+                                        <input type="text" placeholder="EMS/Fire personnel name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Incident Severity *</label>
+                                        <select onchange="timestampSOPField(this)">
+                                            <option value="">Select Severity</option>
+                                            <option value="minor">Minor Injury</option>
+                                            <option value="moderate">Moderate Injury</option>
+                                            <option value="severe">Severe/Critical</option>
+                                            <option value="life-threatening">Life Threatening</option>
+                                        </select>
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Time of Incident *</label>
+                                        <input type="datetime-local" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Location *</label>
+                                        <input type="text" placeholder="Specific location/site number" onchange="timestampSOPField(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="takeIncidentPhoto(this)">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="recordIncidentAudio(this)">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="uploadIncidentDocument(this)">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="notifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop1-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/8 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill" id="sop1-progress"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">✅ Check the scene for safety. Do not enter unsafe areas.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🚨 <strong>Call 911 immediately if:</strong> Person is unconscious, bleeding heavily, not breathing, suspected head/neck/spinal injury, chest pain, seizure, or possible stroke.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🩹 Provide basic aid if you are certified and it's safe to do so.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🛑 Keep the guest still and calm. Do not allow them to walk or move if injured.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🏃 Send another staff or volunteer to direct EMS to the location.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">📞 Notify the GM and begin completing the Incident Report.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🏥 If injury is minor and does not require EMS: Offer first aid if certified, complete Incident Report, monitor guest.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop1')">
+                                <div class="checklist-text">🧽 Clean and disinfect any biohazard (blood, vomit, etc.) only after report is complete and safe to do so.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Medical Emergency SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop1"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearSOPSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveSOPSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop1-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOP 2: Criminal Incident -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleSOP(this)">
+                        <h3>🚨 SOP 2: Criminal Incident (Assault, Theft, Harassment, Vandalism)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>👥 People Involved</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Victim/Complainant *</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Suspect (if known)</label>
+                                        <input type="text" placeholder="Full name or description" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Witness</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Crime Type *</label>
+                                        <select onchange="timestampSOPField(this)">
+                                            <option value="">Select Crime Type</option>
+                                            <option value="assault">Assault</option>
+                                            <option value="theft">Theft</option>
+                                            <option value="harassment">Harassment</option>
+                                            <option value="vandalism">Vandalism</option>
+                                            <option value="domestic">Domestic Violence</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Time of Incident *</label>
+                                        <input type="datetime-local" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Location *</label>
+                                        <input type="text" placeholder="Specific location/site number" onchange="timestampSOPField(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Incident Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="takeIncidentPhoto(this)">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="recordIncidentAudio(this)">🎤 Record Audio</button>
+                                    <button class="btn btn-primary" onclick="uploadIncidentDocument(this)">📄 Upload Document</button>
+                                    <button class="btn btn-emergency" onclick="notifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop2-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/10 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill" id="sop2-progress"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">🚨 <strong>Call 911 immediately</strong> if violence is occurring or threat is imminent.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">🛡️ <strong>Ensure your safety first.</strong> Do not confront suspects or put yourself at risk.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">📱 <strong>Contact police immediately.</strong> Do not delay reporting criminal activity.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">👀 <strong>Observe and document:</strong> suspect description, clothing, vehicle info, direction of travel.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">🚫 <strong>Secure the scene.</strong> Do not allow contamination of evidence. Use barriers if available.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">📝 <strong>Get witness statements</strong> and contact information. Write down exact quotes.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">📷 <strong>Document evidence:</strong> Take photos of damage, scene, any physical evidence.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">🎥 <strong>Check security cameras</strong> if available. Preserve footage immediately.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">📞 <strong>Notify GM and complete incident report.</strong> Include all details and timeline.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop2')">
+                                <div class="checklist-text">👮 <strong>Cooperate fully with police.</strong> Provide all documentation and assist with investigation.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Criminal Incident SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop2"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearSOPSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveSOPSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop2-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional SOPs will be added here following the same pattern -->
+                <!-- For now, I'll add a few more key ones to demonstrate -->
+
+                <!-- SOP 6: Fire Emergency -->
+                <div class="sop-accordion">
+                    <div class="sop-header" onclick="toggleSOP(this)">
+                        <h3>🔥 SOP 6: Fire, Smoke, or Explosion</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="sop-content">
+                        <div class="sop-body">
+                            <div class="names-section">
+                                <h4>🔥 Fire Emergency Details</h4>
+                                <div class="name-input-group">
+                                    <div class="name-input">
+                                        <label>Location of Fire *</label>
+                                        <input type="text" placeholder="Specific location/site number" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Person Reporting *</label>
+                                        <input type="text" placeholder="Full name" onchange="timestampSOPField(this)">
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Fire Type *</label>
+                                        <select onchange="timestampSOPField(this)">
+                                            <option value="">Select Fire Type</option>
+                                            <option value="structure">Structure Fire</option>
+                                            <option value="vehicle">Vehicle Fire</option>
+                                            <option value="brush">Brush/Wildfire</option>
+                                            <option value="propane">Propane/Gas</option>
+                                            <option value="electrical">Electrical</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="name-input">
+                                        <label>Time of Incident *</label>
+                                        <input type="datetime-local" onchange="timestampSOPField(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="incident-media">
+                                <h4>📸 Fire Documentation</h4>
+                                <div class="media-controls">
+                                    <button class="btn btn-primary" onclick="takeIncidentPhoto(this)">📷 Take Photo</button>
+                                    <button class="btn btn-primary" onclick="recordIncidentAudio(this)">🎤 Record Audio</button>
+                                    <button class="btn btn-emergency" onclick="notifyManagement()">🚨 Notify Management</button>
+                                </div>
+                                <div class="media-preview" id="sop6-media-preview"></div>
+                            </div>
+                            
+                            <div class="completion-status">Progress: <span class="progress-text">0/8 completed</span></div>
+                            <div class="progress-bar"><div class="progress-fill" id="sop6-progress"></div></div>
+                            
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">🚨 <strong>CALL 911 IMMEDIATELY</strong> - Every second counts in fire emergencies.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">📢 <strong>EVACUATE</strong> all persons from immediate danger area. Sound alarm if available.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">🧯 Use fire extinguisher ONLY if fire is small and you have clear escape route.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">🏃 Assist with evacuation. Help elderly, disabled, or children evacuate first.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">🚫 Close doors behind you to slow fire spread. Do not use elevators.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">🚒 Meet fire department at entrance and direct them to fire location.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">📊 Conduct headcount at designated assembly area. Report missing persons to fire department.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" onchange="updateSOPProgress(this, 'sop6')">
+                                <div class="checklist-text">⛽ Turn off utilities (gas, electricity) if safe to do so and trained to do it.</div>
+                                <div class="item-timestamp"></div>
+                            </div>
+
+                            <div class="sop-signature-section">
+                                <h4>✍️ Employee Signature - Fire Emergency SOP</h4>
+                                <canvas class="mini-canvas" data-sop="sop6"></canvas>
+                                <div class="mini-controls">
+                                    <button class="btn btn-secondary btn-small" onclick="clearSOPSignature(this)">Clear</button>
+                                    <button class="btn btn-primary btn-small" onclick="saveSOPSignature(this)">Save Signature</button>
+                                </div>
+                                <div class="timestamp" id="sop6-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                </div>
+            </div>
+            <div class="header-info">
+                <h1>📖 Digital Employee Handbook</h1>
+                <div class="subtitle">Comprehensive Policies & Procedures</div>
+                <div style="color: #7f8c8d; font-size: 1em; margin-top: 5px;">106 Douglas Road, Webster, MA 01570</div>
+                <div style="color: #7f8c8d; font-size: 0.9em;">📞 (508) 943-4440 | 🌐 douglasforestrv.com</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation for Handbook and SOPs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('employee-info')" id="employee-info-tab">👤 Employee Information</button>
+            <button class="nav-tab" onclick="switchTab('handbook')" id="handbook-tab">📖 Employee Handbook</button>
+            <button class="nav-tab" onclick="switchTab('sops')" id="sops-tab">🚨 Standard Operating Procedures</button>
+        </div>
+
+        <!-- Employee Information Tab -->
+        <div id="employee-info-content" class="tab-content active">
+            <div class="handbook-section">
+                <h2 style="text-align: center; color: #7CB342; margin-bottom: 30px;">📝 Employee Information Form</h2>
+                
+                <div class="employee-form">
+                    <div class="form-group">
+                        <label>Full Legal Name *</label>
+                        <input type="text" id="employeeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Social Security Number *</label>
+                        <input type="text" id="employeeSSN" placeholder="XXX-XX-XXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth *</label>
+                        <input type="date" id="employeeDOB" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="employeeEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="employeePhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Home Address *</label>
+                        <input type="text" id="employeeAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Position/Department *</label>
+                        <select id="employeePosition" required>
+                            <option value="">Select Position</option>
+                            <option value="front-desk">Front Desk</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="housekeeping">Housekeeping</option>
+                            <option value="security">Security</option>
+                            <option value="activities">Activities Coordinator</option>
+                            <option value="management">Management</option>
+                            <option value="work-camper">Work Camper</option>
+                            <option value="volunteer">Volunteer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date *</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Name *</label>
+                        <input type="text" id="emergencyContactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Phone *</label>
+                        <input type="tel" id="emergencyContactPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Relationship *</label>
+                        <input type="text" id="emergencyContactRelation" placeholder="e.g., Spouse, Parent, Sibling" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Driver's License Number</label>
+                        <input type="text" id="driverLicense">
+                    </div>
+                </div>
+
+                <!-- Photo Capture Section -->
+                <div class="photo-capture">
+                    <h3 style="text-align: center; color: #7CB342; margin-bottom: 20px;">📸 Employee Photo</h3>
+                    <div class="photo-placeholder" id="photo-placeholder">📷</div>
+                    <img class="photo-preview hidden" id="photo-preview" alt="Employee Photo">
+                    <video id="video" class="hidden" width="200" height="200" autoplay></video>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button class="btn btn-primary" onclick="startCamera()">📷 Start Camera</button>
+                        <button class="btn btn-secondary hidden" id="capture-btn" onclick="capturePhoto()">📸 Take Photo</button>
+                        <button class="btn btn-secondary" onclick="uploadPhoto()">📁 Upload Photo</button>
+                        <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                    </div>
+                </div>
+
+                <!-- Manager Bypass -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <button class="btn btn-secondary" onclick="managerBypass()" style="background: #ff9800;">🔓 Manager Bypass - Skip to Next Step</button>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="completeEmployeeInfo()" id="complete-info-btn" disabled>Complete Information & Continue 📖</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Handbook Tab -->
+        <div id="handbook-content" class="tab-content">
+            <div class="handbook-section">
+                <div class="progress-overview">
+                    <h3>📊 Handbook Completion Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overall-progress"></div>
+                    </div>
+                    <div id="progress-text">0 of 0 sections completed (0%)</div>
+                    <p style="margin-top: 10px; color: #666;">Each section must be read and acknowledged before proceeding to the next.</p>
+                    
+                    <!-- Manager Bypass -->
+                    <div style="text-align: center; margin: 20px 0;">
+                        <button class="btn btn-secondary" onclick="handbookManagerBypass()" style="background: #ff9800;">🔓 Manager Bypass - Complete Handbook</button>
+                    </div>
+                </div>
+
+            <!-- Section 1: Welcome & Overview -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>1. Welcome & Overview</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">1.1 Scope of Coverage</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                This handbook applies to ALL individuals who are employed by Douglas Forest RV Resort LLC in any capacity, volunteer their services at the facility, participate as work campers or seasonal workers, provide contractor or consulting services, live on-site while performing any duties, or have access to resort facilities, equipment, or guest areas.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">1.2 Legal Authority</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Douglas Forest RV Resort LLC reserves the right to modify, amend, or terminate any policy at any time without prior notice. This handbook supersedes all previous policies, verbal agreements, or understandings.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Employment Classification & At-Will Policy -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>2. Employment Classification & At-Will Policy</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">2.1 At-Will Employment</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                ALL employment, volunteer work, and work camping arrangements are AT-WILL. This means employment may be terminated by either party at any time, no cause or advance notice is required for termination, no contract of employment is created by this handbook, and no promises of continued employment are implied.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">2.2 Classification Categories</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                <strong>Full-Time Employees:</strong> 30+ hours per week with benefits eligibility<br>
+                                <strong>Part-Time Employees:</strong> Less than 30 hours per week<br>
+                                <strong>Seasonal Workers:</strong> Temporary employment during peak periods<br>
+                                <strong>Volunteers:</strong> Unpaid individuals providing services<br>
+                                <strong>Work Campers:</strong> Individuals receiving site accommodations in exchange for work<br>
+                                <strong>Independent Contractors:</strong> Third-party service providers
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">2.3 Probationary Period</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                All new hires are subject to a 90-day probationary period during which termination may occur without cause or appeal process.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Background Check & Drug Testing Requirements -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>3. Background Check & Drug Testing Requirements</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">3.1 Mandatory Background Checks</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                ALL individuals must submit to comprehensive background screening including federal, state, and county criminal records searches, sex offender registry checks, terrorist watch list screening, Social Security verification, employment eligibility verification, and reference checks.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">3.2 Background Check Standards</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                <strong>Automatic Disqualification:</strong> Any felony conviction within 10 years, crimes against persons, theft/fraud/financial crimes, drug-related offenses, crimes involving minors, sex offender registration, or outstanding warrants.<br><br>
+                                <strong>Discretionary Disqualification:</strong> Misdemeanor convictions within 5 years, pattern of minor offenses, falsification of application materials, or failure to disclose required information.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">3.3 Drug Testing Requirements</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Pre-employment testing is required for all individuals and must include all illegal substances and alcohol. Random testing may be conducted without notice. Post-incident testing is required after workplace accidents, safety violations, or when reasonable suspicion exists. Refusal to test results in immediate termination.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">3.4 Background Check Consent</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                By signing this handbook, you provide irrevocable consent for Douglas Forest RV Resort to conduct initial and periodic background checks, verify all information provided, contact references and employers, share results with insurance carriers and legal counsel, and maintain records indefinitely.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Zero-Tolerance Substance Policy -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>4. Zero-Tolerance Substance Policy</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.1 Prohibited Substances</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                <strong>Alcohol:</strong> Beer, wine, liquor, or any alcoholic beverage - consumption, possession, or being under the influence with NO EXCEPTIONS for off-duty time.<br>
+                                <strong>Marijuana:</strong> All forms including medical marijuana, CBD products with THC, edibles, oils, or any cannabis derivatives.<br>
+                                <strong>Illegal Drugs:</strong> Cocaine, heroin, methamphetamines, hallucinogens, synthetic drugs, or any controlled substance without valid prescription.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.2 Policy Scope</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                This policy applies 24/7 while on resort property (including living quarters), during all work hours regardless of location, while operating company vehicles or equipment, during company-sponsored events, and while wearing company uniforms or identification.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.3 Medical Marijuana Exclusion</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Massachusetts state law permitting medical marijuana use does NOT create an exception to this policy. If you require marijuana for medical purposes, this employment is not compatible with your medical needs. Douglas Forest RV Resort will not provide accommodation for marijuana use under any circumstances.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.4 Prescription Medication Policy</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Prescription medications must be used only as prescribed. Medications that may impair judgment or motor skills must be reported to management. Original prescription bottles must be available for inspection. Abuse of prescription medications will result in immediate termination.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.5 Enforcement & Consequences</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                First violation results in immediate termination with no appeal process. Additional consequences may include forfeiture of wages/benefits, eviction from on-site housing, report to law enforcement, criminal charges for illegal substances, and civil liability for damages caused while intoxicated.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">4.6 Reporting Obligations</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                All employees must immediately report suspected substance use by coworkers, discovery of alcohol or drugs on property, impaired behavior by any individual. Failure to report known violations may result in termination.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue with remaining sections... -->
+            <!-- For brevity, I'll add a few more key sections -->
+
+            <!-- Section 5: Code of Conduct & Professional Standards -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>5. Code of Conduct & Professional Standards</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">5.1 General Conduct Requirements</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                All individuals must maintain the highest standards of professional conduct including treating all guests, coworkers, and supervisors with respect and courtesy, maintaining a positive helpful attitude, following all lawful instructions from supervisors, and reporting to work mentally and physically fit for duty.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">5.2 Prohibited Conduct</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Prohibited behaviors include insubordination, harassment or discrimination, theft, falsification of records, sleeping during work hours, personal use of company resources, gambling on property, fighting, horseplay, or unsafe behavior.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">5.3 Appearance & Uniform Standards</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Clean, professional appearance required at all times. Company uniforms must be worn when provided. Personal hygiene standards must be maintained. Clothing must be appropriate for work environment. Offensive tattoos must be covered. Excessive jewelry not permitted.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">5.4 Guest Relations Standards</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                Always greet guests warmly and professionally. Respond promptly to guest needs and requests. Never argue with or be rude to guests. Maintain confidentiality of guest information. Report guest complaints immediately to management. Never accept tips or gratuities from guests.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more sections following the same pattern... -->
+            <!-- Section 20: Acknowledgment & Signature Requirements -->
+            <div class="section-accordion">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>20. Acknowledgment & Signature Requirements</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-body">
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">20.1 Employee Acknowledgments</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                By signing below, I acknowledge that I have read and understand all policies, agree to comply with all provisions, understand that violation may result in immediate termination, consent to background checks and drug testing, assume all risks associated with my work, release and hold harmless Douglas Forest RV Resort LLC, agree to indemnify the company, understand at-will employment, will maintain confidentiality, and consent to electronic monitoring.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">20.2 Zero-Tolerance Substance Policy Acknowledgment</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                I specifically acknowledge and agree to the zero-tolerance policy prohibiting alcohol and drug use on company property at any time, including off-duty hours. I understand that this includes medical marijuana and that no exceptions will be made for any reason.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">20.3 Background Check Consent</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                I authorize Douglas Forest RV Resort LLC to conduct comprehensive background checks and ongoing monitoring as described in this handbook. I consent to verification of all information provided and sharing of results with insurance carriers and legal counsel.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">20.4 Liability Waiver & Risk Assumption</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                I acknowledge that I have read and understand the risks associated with working at Douglas Forest RV Resort. I voluntarily assume all such risks and release the company from any liability for injuries or damages that may occur.
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <div class="subsection-header">
+                                <input type="checkbox" class="subsection-checkbox" onchange="updateProgress(this)">
+                                <div class="subsection-title">20.5 Final Acknowledgment Statement</div>
+                                <div class="timestamp"></div>
+                            </div>
+                            <div class="subsection-content">
+                                I certify that I have read, understood, and agree to comply with all policies and procedures outlined in this comprehensive employee handbook. I understand that this handbook constitutes a legally binding agreement and that violation of any provision may result in immediate termination, legal action, and personal liability.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Signature Section - Only shows when all sections are complete -->
+            <div class="final-signature-section" id="final-signature-section">
+                <h3>✍️ Final Digital Signature</h3>
+                <p style="margin-bottom: 20px;">By signing below, you certify that you have read and acknowledged all sections of this employee handbook.</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px;">Employee Name:</label>
+                    <input type="text" id="employee-name" style="width: 100%; padding: 10px; border: 2px solid #bdc3c7; border-radius: 8px;">
+                </div>
+
+                <canvas id="final-signature-canvas" class="signature-canvas"></canvas>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="clearFinalSignature()">Clear Signature</button>
+                    <button class="btn btn-primary" onclick="completeFinalSignature()">Complete Handbook ✓</button>
+                </div>
+                
+                <div id="final-timestamp" style="text-align: center; margin-top: 15px; color: #7f8c8d; font-style: italic;"></div>
+            </div>
+
+            <!-- Completion Summary -->
+            <div class="completion-summary hidden" id="completion-summary">
+                <h3>🎉 Handbook Completed Successfully!</h3>
+                <p>You have successfully read and acknowledged all sections of the Douglas Forest RV Resort Employee Handbook.</p>
+                <div id="completion-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let totalSubsections = 0;
+        let completedSubsections = 0;
+        let sectionProgress = {};
+        let finalSignatureCanvas;
+        let finalSignatureCtx;
+        let employeePhoto = null;
+        let handbookCompleted = false;
+        let employeeInfoCompleted = false;
+
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeHandbook();
+            setupFinalSignatureCanvas();
+            setupSOPCanvases();
+            updateTabStates();
+        });
+
+        function initializeHandbook() {
+            // Count total subsections
+            const subsections = document.querySelectorAll('.subsection-checkbox');
+            totalSubsections = subsections.length;
+            
+            // Initialize section progress tracking
+            const sections = document.querySelectorAll('.section-accordion');
+            sections.forEach((section, index) => {
+                const sectionNumber = index + 1;
+                const sectionSubsections = section.querySelectorAll('.subsection-checkbox');
+                sectionProgress[sectionNumber] = {
+                    total: sectionSubsections.length,
+                    completed: 0
+                };
+            });
+
+            updateOverallProgress();
+        }
+
+        function updateTabStates() {
+            const handbookTab = document.getElementById('handbook-tab');
+            const sopsTab = document.getElementById('sops-tab');
+            
+            // Disable handbook tab until employee info is complete
+            if (!employeeInfoCompleted) {
+                handbookTab.disabled = true;
+                handbookTab.style.opacity = '0.5';
+                handbookTab.style.cursor = 'not-allowed';
+            } else {
+                handbookTab.disabled = false;
+                handbookTab.style.opacity = '1';
+                handbookTab.style.cursor = 'pointer';
+            }
+            
+            // Disable SOPs tab until handbook is complete
+            if (!handbookCompleted) {
+                sopsTab.disabled = true;
+                sopsTab.style.opacity = '0.5';
+                sopsTab.style.cursor = 'not-allowed';
+            } else {
+                sopsTab.disabled = false;
+                sopsTab.style.opacity = '1';
+                sopsTab.style.cursor = 'pointer';
+            }
+        }
+
+        function switchTab(tabName) {
+            // Check if tab is disabled
+            const tab = document.getElementById(tabName + '-tab');
+            if (tab.disabled) {
+                showNotification('⚠️ Complete previous steps first!', 'warning');
+                return;
+            }
+
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-content').classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Employee Information Functions
+        function validateEmployeeInfo() {
+            const required = ['employeeName', 'employeeSSN', 'employeeDOB', 'employeeEmail', 
+                             'employeePhone', 'employeeAddress', 'employeePosition', 'startDate',
+                             'emergencyContactName', 'emergencyContactPhone', 'emergencyContactRelation'];
+            
+            return required.every(id => {
+                const field = document.getElementById(id);
+                return field && field.value.trim() !== '';
+            });
+        }
+
+        function updateCompleteInfoButton() {
+            const completeBtn = document.getElementById('complete-info-btn');
+            const hasInfo = validateEmployeeInfo();
+            const hasPhoto = employeePhoto !== null;
+            
+            completeBtn.disabled = !(hasInfo && hasPhoto);
+            
+            if (hasInfo && hasPhoto) {
+                completeBtn.textContent = 'Complete Information & Continue 📖';
+                completeBtn.style.background = 'linear-gradient(135deg, #7CB342, #689F38)';
+            } else if (hasInfo && !hasPhoto) {
+                completeBtn.textContent = 'Photo Required - Take Selfie 📸';
+                completeBtn.style.background = '#ff9800';
+            } else {
+                completeBtn.textContent = 'Complete All Fields First';
+                completeBtn.style.background = '#95a5a6';
+            }
+        }
+
+        // Photo capture functions
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.classList.remove('hidden');
+                    document.getElementById('capture-btn').classList.remove('hidden');
+                    document.getElementById('photo-placeholder').classList.add('hidden');
+                })
+                .catch(err => {
+                    console.error('Camera access denied:', err);
+                    showNotification('⚠️ Camera access required for employee photo', 'warning');
+                });
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, 200, 200);
+            
+            employeePhoto = canvas.toDataURL('image/jpeg', 0.8);
+            displayPhoto(employeePhoto);
+            
+            // Stop camera
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.classList.add('hidden');
+            document.getElementById('capture-btn').classList.add('hidden');
+            
+            updateCompleteInfoButton();
+            showNotification('📸 Photo captured successfully!', 'success');
+        }
+
+        function uploadPhoto() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    employeePhoto = e.target.result;
+                    displayPhoto(employeePhoto);
+                    updateCompleteInfoButton();
+                    showNotification('📁 Photo uploaded successfully!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function displayPhoto(photoData) {
+            const preview = document.getElementById('photo-preview');
+            preview.src = photoData;
+            preview.classList.remove('hidden');
+            document.getElementById('photo-placeholder').classList.add('hidden');
+        }
+
+        function completeEmployeeInfo() {
+            if (!validateEmployeeInfo() || !employeePhoto) {
+                showNotification('⚠️ Please complete all required fields and take a photo', 'warning');
+                return;
+            }
+            
+            employeeInfoCompleted = true;
+            updateTabStates();
+            
+            // Scroll to top and switch to handbook tab
+            scrollToTopAndSwitchTab('handbook');
+            
+            showNotification('✅ Employee information completed! Please read the handbook.', 'success');
+            
+            // Save employee info (would go to Firebase)
+            console.log('Employee info saved:', {
+                name: document.getElementById('employeeName').value,
+                ssn: document.getElementById('employeeSSN').value,
+                email: document.getElementById('employeeEmail').value,
+                photo: employeePhoto,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Manager bypass functions
+        function managerBypass() {
+            if (confirm('Manager bypass: Skip employee information form?')) {
+                employeeInfoCompleted = true;
+                employeePhoto = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAGAGjJlQAAAAABJRU5ErkJggg=='; // 1x1 pixel
+                updateTabStates();
+                
+                // Scroll to top and switch to handbook tab
+                scrollToTopAndSwitchTab('handbook');
+                
+                showNotification('🔓 Manager bypass activated - Employee info completed', 'success');
+            }
+        }
+
+        function scrollToTopAndSwitchTab(tabName) {
+            // Smooth scroll to top of page
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Small delay to allow scroll to start, then switch tabs
+            setTimeout(() => {
+                switchTab(tabName);
+            }, 300);
+        }
+
+        function handbookManagerBypass() {
+            if (confirm('Manager bypass: Mark handbook as completed?')) {
+                // Mark all subsections as complete
+                document.querySelectorAll('.subsection-checkbox').forEach(cb => {
+                    cb.checked = true;
+                    const timestamp = cb.closest('.subsection').querySelector('.timestamp');
+                    timestamp.textContent = `Manager Bypass: ${new Date().toLocaleString()}`;
+                    timestamp.classList.add('show');
+                });
+                
+                completedSubsections = totalSubsections;
+                handbookCompleted = true;
+                updateOverallProgress();
+                updateTabStates();
+                
+                showNotification('🔓 Manager bypass activated - Handbook completed', 'success');
+            }
+        }
+
+        function sopManagerBypass() {
+            if (confirm('Manager bypass: Unlock SOPs without completing handbook?')) {
+                handbookCompleted = true;
+                updateTabStates();
+                showNotification('🔓 Manager bypass activated - SOPs unlocked', 'success');
+            }
+        }
+
+        // SOP Functions
+        function toggleSOP(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            // Close all other SOPs
+            document.querySelectorAll('.sop-header').forEach(h => {
+                if (h !== header) {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                    h.querySelector('.toggle-icon').style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current SOP
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                content.style.maxHeight = '0';
+            }
+        }
+
+        function timestampSOPField(input) {
+            if (input.value.trim() !== '') {
+                let timestampDiv = input.parentElement.querySelector('.field-timestamp');
+                if (!timestampDiv) {
+                    timestampDiv = document.createElement('div');
+                    timestampDiv.className = 'field-timestamp';
+                    timestampDiv.style.cssText = `
+                        background: rgba(124, 179, 66, 0.1);
+                        color: #7CB342;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-size: 0.8em;
+                        margin-top: 5px;
+                    `;
+                    input.parentElement.appendChild(timestampDiv);
+                }
+                timestampDiv.textContent = `Entered: ${new Date().toLocaleString()}`;
+            }
+        }
+
+        function updateSOPProgress(checkbox, sopId) {
+            const sopBody = checkbox.closest('.sop-body');
+            const checkboxes = sopBody.querySelectorAll('input[type="checkbox"]');
+            const progressText = sopBody.querySelector('.progress-text');
+            const progressFill = sopBody.querySelector('.progress-fill');
+            const timestamp = checkbox.closest('.checklist-item').querySelector('.item-timestamp');
+            
+            const total = checkboxes.length;
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = (completed / total) * 100;
+            
+            // Update progress display
+            progressText.textContent = `${completed}/${total} completed`;
+            progressFill.style.width = `${percentage}%`;
+            
+            // Show timestamp when checked
+            if (checkbox.checked) {
+                timestamp.textContent = `Completed: ${new Date().toLocaleString()}`;
+                timestamp.style.display = 'block';
+            } else {
+                timestamp.style.display = 'none';
+            }
+        }
+
+        function takeIncidentPhoto(button) {
+            const sopBody = button.closest('.sop-body');
+            const preview = sopBody.querySelector('.media-preview');
+            
+            // Create demo photo element
+            const photoDiv = document.createElement('div');
+            photoDiv.className = 'media-item';
+            photoDiv.innerHTML = `
+                <div style="width: 100px; height: 100px; background: linear-gradient(45deg, #7CB342, #8BC34A); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8em;">
+                    📷<br>Photo<br>${new Date().toLocaleTimeString()}
+                </div>
+                <button class="remove-btn" onclick="removeMedia(this)">×</button>
+            `;
+            preview.appendChild(photoDiv);
+            
+            showNotification('📷 Incident photo captured', 'success');
+        }
+
+        function recordIncidentAudio(button) {
+            const sopBody = button.closest('.sop-body');
+            const preview = sopBody.querySelector('.media-preview');
+            
+            const audioDiv = document.createElement('div');
+            audioDiv.className = 'media-item';
+            audioDiv.innerHTML = `
+                <div style="width: 100px; height: 100px; background: linear-gradient(45deg, #FF9800, #F57C00); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8em;">
+                    🎤<br>Audio<br>${new Date().toLocaleTimeString()}
+                </div>
+                <button class="remove-btn" onclick="removeMedia(this)">×</button>
+            `;
+            preview.appendChild(audioDiv);
+            
+            showNotification('🎤 Audio recording saved', 'success');
+        }
+
+        function uploadIncidentDocument(button) {
+            const sopBody = button.closest('.sop-body');
+            const preview = sopBody.querySelector('.media-preview');
+            
+            const docDiv = document.createElement('div');
+            docDiv.className = 'media-item';
+            docDiv.innerHTML = `
+                <div style="width: 100px; height: 100px; background: linear-gradient(45deg, #2196F3, #1976D2); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8em;">
+                    📄<br>Document<br>${new Date().toLocaleTimeString()}
+                </div>
+                <button class="remove-btn" onclick="removeMedia(this)">×</button>
+            `;
+            preview.appendChild(docDiv);
+            
+            showNotification('📄 Document uploaded', 'success');
+        }
+
+        function removeMedia(button) {
+            button.parentElement.remove();
+        }
+
+        function notifyManagement() {
+            showNotification('🚨 ALERT: Management has been notified immediately!', 'success');
+            setTimeout(() => {
+                alert('📱 EMERGENCY NOTIFICATION SENT:\n\n✅ Manager alerted via SMS\n✅ Owner notified via email\n✅ Incident logged in system\n✅ Emergency response activated');
+            }, 500);
+        }
+
+        function callEmergency(number) {
+            if (number === '911') {
+                alert('🚨 CALLING 911 EMERGENCY SERVICES\n\nThis would dial emergency services in a real scenario.');
+            } else {
+                alert(`📞 CALLING: ${number}\n\nThis would dial the number in a real scenario.`);
+            }
+        }
+
+        function setupSOPCanvases() {
+            document.querySelectorAll('.mini-canvas').forEach(canvas => {
+                const ctx = canvas.getContext('2d');
+                let isDrawing = false;
+
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                function startDrawing(e) {
+                    isDrawing = true;
+                    const rect = canvas.getBoundingClientRect();
+                    ctx.beginPath();
+                    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                    ctx.moveTo(x, y);
+                }
+
+                function draw(e) {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    ctx.lineWidth = 2;
+                    ctx.lineCap = 'round';
+                    ctx.strokeStyle = '#7CB342';
+                    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                }
+
+                function stopDrawing() {
+                    isDrawing = false;
+                }
+
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('touchstart', startDrawing);
+                canvas.addEventListener('touchmove', draw);
+                canvas.addEventListener('touchend', stopDrawing);
+            });
+        }
+
+        function clearSOPSignature(button) {
+            const canvas = button.closest('.sop-signature-section').querySelector('.mini-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveSOPSignature(button) {
+            const canvas = button.closest('.sop-signature-section').querySelector('.mini-canvas');
+            const sopId = canvas.dataset.sop;
+            const timestampDiv = document.getElementById(sopId + '-timestamp');
+            
+            const employeeName = document.getElementById('employeeName')?.value || 'Employee';
+            const timestamp = new Date().toLocaleString();
+            timestampDiv.innerHTML = `<strong>Signed by:</strong> ${employeeName}<br><strong>Date:</strong> ${timestamp}`;
+            
+            showNotification(`✅ ${sopId.toUpperCase()} signature saved!`, 'success');
+        }
+
+        // Add event listeners for employee form fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const formFields = ['employeeName', 'employeeSSN', 'employeeDOB', 'employeeEmail', 
+                               'employeePhone', 'employeeAddress', 'employeePosition', 'startDate',
+                               'emergencyContactName', 'emergencyContactPhone', 'emergencyContactRelation'];
+            
+            formFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', updateCompleteInfoButton);
+                    field.addEventListener('change', updateCompleteInfoButton);
+                }
+            });
+        });
+
+        function initializeHandbook() {
+            // Count total subsections
+            const subsections = document.querySelectorAll('.subsection-checkbox');
+            totalSubsections = subsections.length;
+            
+            // Initialize section progress tracking
+            const sections = document.querySelectorAll('.section-accordion');
+            sections.forEach((section, index) => {
+                const sectionNumber = index + 1;
+                const sectionSubsections = section.querySelectorAll('.subsection-checkbox');
+                sectionProgress[sectionNumber] = {
+                    total: sectionSubsections.length,
+                    completed: 0
+                };
+            });
+
+            updateOverallProgress();
+        }
+
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            // Close all other sections
+            document.querySelectorAll('.section-header').forEach(h => {
+                if (h !== header) {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                    h.querySelector('.toggle-icon').style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current section
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                content.style.maxHeight = '0';
+            }
+        }
+
+        function updateProgress(checkbox) {
+            const timestamp = checkbox.closest('.subsection').querySelector('.timestamp');
+            const sectionAccordion = checkbox.closest('.section-accordion');
+            const sectionHeader = sectionAccordion.querySelector('.section-header');
+            
+            if (checkbox.checked) {
+                // Add timestamp
+                const now = new Date();
+                timestamp.textContent = `Completed: ${now.toLocaleString()}`;
+                timestamp.classList.add('show');
+                
+                // Update completed count
+                completedSubsections++;
+                
+                // Update section progress
+                const sectionIndex = Array.from(document.querySelectorAll('.section-accordion')).indexOf(sectionAccordion) + 1;
+                sectionProgress[sectionIndex].completed++;
+                
+                // Check if section is complete
+                if (sectionProgress[sectionIndex].completed === sectionProgress[sectionIndex].total) {
+                    sectionHeader.classList.add('completed');
+                    showNotification(`✅ Section ${sectionIndex} completed!`, 'success');
+                }
+                
+                showNotification('✅ Subsection acknowledged!', 'success');
+            } else {
+                // Remove timestamp
+                timestamp.classList.remove('show');
+                
+                // Update completed count
+                completedSubsections--;
+                
+                // Update section progress
+                const sectionIndex = Array.from(document.querySelectorAll('.section-accordion')).indexOf(sectionAccordion) + 1;
+                sectionProgress[sectionIndex].completed--;
+                
+                // Remove section complete status
+                sectionHeader.classList.remove('completed');
+            }
+            
+            updateOverallProgress();
+        }
+
+        function updateOverallProgress() {
+            const progressFill = document.getElementById('overall-progress');
+            const progressText = document.getElementById('progress-text');
+            
+            const percentage = totalSubsections > 0 ? (completedSubsections / totalSubsections) * 100 : 0;
+            
+            progressFill.style.width = `${percentage}%`;
+            progressText.textContent = `${completedSubsections} of ${totalSubsections} sections completed (${Math.round(percentage)}%)`;
+            
+            // Show final signature section when all subsections are complete
+            const finalSignature = document.getElementById('final-signature-section');
+            if (completedSubsections === totalSubsections && totalSubsections > 0) {
+                finalSignature.classList.add('show');
+                showNotification('🎉 All sections complete! Please provide your final signature.', 'success');
+            } else {
+                finalSignature.classList.remove('show');
+            }
+        }
+
+        function setupFinalSignatureCanvas() {
+            finalSignatureCanvas = document.getElementById('final-signature-canvas');
+            finalSignatureCtx = finalSignatureCanvas.getContext('2d');
+            let isDrawing = false;
+
+            function resizeCanvas() {
+                const rect = finalSignatureCanvas.getBoundingClientRect();
+                finalSignatureCanvas.width = rect.width;
+                finalSignatureCanvas.height = rect.height;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function startDrawing(e) {
+                isDrawing = true;
+                const rect = finalSignatureCanvas.getBoundingClientRect();
+                finalSignatureCtx.beginPath();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                finalSignatureCtx.moveTo(x, y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                const rect = finalSignatureCanvas.getBoundingClientRect();
+                finalSignatureCtx.lineWidth = 2;
+                finalSignatureCtx.lineCap = 'round';
+                finalSignatureCtx.strokeStyle = '#7CB342';
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                finalSignatureCtx.lineTo(x, y);
+                finalSignatureCtx.stroke();
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+            }
+
+            finalSignatureCanvas.addEventListener('mousedown', startDrawing);
+            finalSignatureCanvas.addEventListener('mousemove', draw);
+            finalSignatureCanvas.addEventListener('mouseup', stopDrawing);
+            finalSignatureCanvas.addEventListener('touchstart', startDrawing);
+            finalSignatureCanvas.addEventListener('touchmove', draw);
+            finalSignatureCanvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function clearFinalSignature() {
+            finalSignatureCtx.clearRect(0, 0, finalSignatureCanvas.width, finalSignatureCanvas.height);
+        }
+
+        function completeFinalSignature() {
+            const employeeName = document.getElementById('employee-name').value.trim();
+            
+            if (!employeeName) {
+                showNotification('⚠️ Please enter your name before signing.', 'warning');
+                return;
+            }
+            
+            // Check if signature canvas has content
+            const imgData = finalSignatureCanvas.toDataURL();
+            const blankCanvas = document.createElement('canvas');
+            blankCanvas.width = finalSignatureCanvas.width;
+            blankCanvas.height = finalSignatureCanvas.height;
+            const blankData = blankCanvas.toDataURL();
+            
+            if (imgData === blankData) {
+                showNotification('⚠️ Please provide your signature before completing.', 'warning');
+                return;
+            }
+            
+            // Complete the handbook
+            const completionTime = new Date();
+            document.getElementById('final-timestamp').textContent = 
+                `Completed by ${employeeName} on ${completionTime.toLocaleString()}`;
+            
+            // Show completion summary
+            const completionSummary = document.getElementById('completion-summary');
+            const completionDetails = document.getElementById('completion-details');
+            
+            completionDetails.innerHTML = `
+                <p><strong>Employee:</strong> ${employeeName}</p>
+                <p><strong>Completion Date:</strong> ${completionTime.toLocaleString()}</p>
+                <p><strong>Sections Completed:</strong> ${completedSubsections}/${totalSubsections}</p>
+                <p><strong>Signature Provided:</strong> ✓ Yes</p>
+            `;
+            
+            completionSummary.classList.remove('hidden');
+            
+            // Hide the signature section
+            document.getElementById('final-signature-section').classList.remove('show');
+            
+            showNotification('🎉 Employee Handbook completed successfully!', 'success');
+            
+            // Here you would normally save to Firebase
+            console.log('Handbook completion data:', {
+                employeeName: employeeName,
+                completionTime: completionTime.toISOString(),
+                sectionsCompleted: completedSubsections,
+                totalSections: totalSubsections,
+                signature: imgData,
+                sectionProgress: sectionProgress
+            });
+        }
+
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

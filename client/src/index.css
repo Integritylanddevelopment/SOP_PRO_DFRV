@@ -3,29 +3,30 @@
 @tailwind utilities;
 
 :root {
+  /* Douglas Forest RV Resort Theme */
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
+  --muted: hsl(30, 15%, 95%);
   --muted-foreground: hsl(25, 5.3%, 44.7%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(20, 14.3%, 4.1%);
   --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(207, 90%, 54%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(164, 86%, 40%);
-  --secondary-foreground: hsl(211, 100%, 99%);
-  --accent: hsl(0, 84%, 60%);
-  --accent-foreground: hsl(211, 100%, 99%);
+  --border: hsl(30, 15%, 90%);
+  --input: hsl(30, 15%, 90%);
+  --primary: hsl(30, 25%, 54%); /* Douglas Forest tan #8B7355 */
+  --primary-foreground: hsl(60, 9.1%, 97.8%);
+  --secondary: hsl(90, 50%, 20%); /* Forest green #2D5016 */
+  --secondary-foreground: hsl(60, 9.1%, 97.8%);
+  --accent: hsl(35, 30%, 85%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --warning: hsl(36, 100%, 48%);
   --warning-foreground: hsl(211, 100%, 99%);
   --success: hsl(142, 86%, 40%);
   --success-foreground: hsl(211, 100%, 99%);
-  --ring: hsl(20, 14.3%, 4.1%);
+  --ring: hsl(30, 25%, 54%);
   --radius: 0.5rem;
 }
 

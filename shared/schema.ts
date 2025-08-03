@@ -33,7 +33,7 @@ export const users = pgTable("users", {
   position: text("position"),
   role: text("role").$type<"employee" | "manager" | "owner">().notNull(),
   status: text("status").$type<"pending" | "approved" | "rejected" | "active" | "inactive">().default("pending").notNull(),
-  approvedBy: uuid("approved_by").references(() => users.id),
+  approvedBy: uuid("approved_by"),
   approvedAt: timestamp("approved_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -176,6 +176,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   approver: one(users, {
     fields: [users.approvedBy],
     references: [users.id],
+    relationName: "approver",
   }),
   signatures: many(userSignatures),
   sopExecutions: many(sopExecutions),
