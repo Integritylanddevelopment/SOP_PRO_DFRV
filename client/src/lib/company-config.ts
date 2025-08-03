@@ -117,5 +117,5 @@ export const getIndustryTemplates = (industry: string) => {
     }
   };
   
-  return templates[industry] || templates["Hospitality - RV Resort"];
+  return templates[industry as keyof typeof templates] || templates["Hospitality - RV Resort"];
 };

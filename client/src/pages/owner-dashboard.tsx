@@ -1,15 +1,25 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, Users, TriangleAlert, Shield, GraduationCap, Server, Eye, Download, Plus, Settings, BarChart } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, Users, TriangleAlert, Building, Settings, Plus, BarChart, Eye, Download, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
+import { AnimatedBackground } from "@/components/animated-background";
+import { AIAssistant } from "@/components/ai-assistant";
+import { AnalyticsDashboard } from "@/components/analytics-dashboard";
+import { getCompanyConfig } from "@/lib/company-config";
 
 export default function OwnerDashboard() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedProperty, setSelectedProperty] = useState("douglas-forest");
+  const companyConfig = getCompanyConfig();
 
   const { data: stats } = useQuery({
     queryKey: ['/api/stats'],
@@ -23,312 +33,332 @@ export default function OwnerDashboard() {
 
   const recentIncidents = incidents.slice(0, 3);
 
+  // Multi-tenant properties data
+  const properties = [
+    { id: "douglas-forest", name: "Douglas Forest RV Resort", status: "active", employees: 24 },
+    { id: "mountain-view", name: "Mountain View Resort", status: "active", employees: 18 },
+    { id: "lakeside-camping", name: "Lakeside Camping", status: "active", employees: 15 },
+    { id: "pine-valley", name: "Pine Valley RV Park", status: "pending", employees: 8 }
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+      <AnimatedBackground />
+      
+      {/* Enhanced Header */}
+      <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-white/95 backdrop-blur-sm shadow-sm border-b relative z-10"
+      >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Button 
-                data-testid="button-back"
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setLocation('/')}
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h1 className="text-xl font-semibold text-slate-900">Owner Dashboard</h1>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button 
+                  data-testid="button-back"
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setLocation('/')}
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              </motion.div>
+              <div>
+                <h1 className="text-xl font-semibold text-slate-900">
+                  Owner Dashboard
+                </h1>
+                <p className="text-sm text-slate-600">{companyConfig.name}</p>
+              </div>
             </div>
+            
             <div className="flex items-center space-x-4">
-              <Select defaultValue="rv-park-solutions">
-                <SelectTrigger data-testid="select-company" className="w-auto">
-                  <SelectValue />
+              {/* Multi-Property Selector */}
+              <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                <SelectTrigger data-testid="select-property" className="w-64">
+                  <div className="flex items-center gap-2">
+                    <Building className="h-4 w-4" />
+                    <SelectValue />
+                  </div>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="rv-park-solutions">RV Park Solutions</SelectItem>
-                  <SelectItem value="mountain-view">Mountain View Resort</SelectItem>
-                  <SelectItem value="lakeside">Lakeside Camping</SelectItem>
+                  {properties.map((property) => (
+                    <SelectItem key={property.id} value={property.id}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{property.name}</span>
+                        <div className="flex items-center gap-2 ml-4">
+                          <Badge variant={property.status === 'active' ? 'default' : 'secondary'}>
+                            {property.status}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {property.employees} employees
+                          </span>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+
+              {/* Action Buttons */}
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button variant="outline" size="sm" data-testid="button-add-property">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Property
+                </Button>
+              </motion.div>
+              
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button variant="outline" size="sm" data-testid="button-settings">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+              </motion.div>
+
               <div className="text-sm text-slate-600">
                 <span data-testid="text-username" className="font-medium">{user?.firstName} {user?.lastName}</span>
-                <div className="text-xs text-slate-500">Owner</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="max-w-7xl mx-auto p-4 py-8">
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">Total Employees</p>
-                  <p data-testid="metric-employees" className="text-2xl font-bold text-slate-900">
-                    {stats?.totalEmployees || 0}
-                  </p>
-                </div>
-                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                  <Users className="text-white" size={20} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-6 relative z-10">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BarChart className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart className="h-4 w-4" />
+              Analytics  
+            </TabsTrigger>
+            <TabsTrigger value="properties" className="flex items-center gap-2">
+              <Building className="h-4 w-4" />
+              Properties
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">Active Incidents</p>
-                  <p data-testid="metric-incidents" className="text-2xl font-bold text-slate-900">
-                    {stats?.activeIncidents || 0}
-                  </p>
-                </div>
-                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-                  <TriangleAlert className="text-white" size={20} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <TabsContent value="overview" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Quick Stats */}
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Card className="relative overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
+                      <Building className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">4</div>
+                      <p className="text-xs text-muted-foreground">
+                        3 active, 1 pending
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">Compliance Rate</p>
-                  <p data-testid="metric-compliance" className="text-2xl font-bold text-slate-900">
-                    {stats?.complianceRate || 0}%
-                  </p>
-                </div>
-                <div className="w-10 h-10 bg-success rounded-full flex items-center justify-center">
-                  <Shield className="text-white" size={20} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Card className="relative overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{stats?.totalEmployees || 65}</div>
+                      <p className="text-xs text-muted-foreground">
+                        Across all properties
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">Training Progress</p>
-                  <p data-testid="metric-training" className="text-2xl font-bold text-slate-900">
-                    {stats?.trainingProgress || 0}%
-                  </p>
-                </div>
-                <div className="w-10 h-10 bg-warning rounded-full flex items-center justify-center">
-                  <GraduationCap className="text-white" size={20} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Card className="relative overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Performance Score</CardTitle>
+                      <Zap className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-green-600">94%</div>
+                      <p className="text-xs text-muted-foreground">
+                        +5% from last month
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-600">System Health</p>
-                  <p data-testid="metric-health" className="text-2xl font-bold text-success">
-                    {stats?.systemHealth || 0}%
-                  </p>
-                </div>
-                <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
-                  <Server className="text-white" size={20} />
-                </div>
+                <motion.div whileHover={{ scale: 1.02 }}>
+                  <Card className="relative overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Active Issues</CardTitle>
+                      <TriangleAlert className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-orange-600">3</div>
+                      <p className="text-xs text-muted-foreground">
+                        Requires attention
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Recent Incidents */}
-          <div className="lg:col-span-2">
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-slate-900">Recent Incidents & Reports</h3>
-                  <Button variant="ghost" className="text-primary hover:text-blue-700 text-sm font-medium">
-                    View All
-                  </Button>
-                </div>
-              </div>
-              <CardContent className="p-6">
-                {recentIncidents.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    No recent incidents
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {recentIncidents.map((incident: any) => (
-                      <div key={incident.id} className="flex items-start space-x-4 p-4 border border-slate-200 rounded-lg">
-                        <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center flex-shrink-0">
-                          <TriangleAlert className="text-white" size={20} />
+              {/* Narrative Reports - Clickable */}
+              <div className="grid gap-6 md:grid-cols-2">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <Card className="h-full cursor-pointer hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Eye className="h-5 w-5" />
+                        Executive Summary Report
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        <strong>Douglas Forest RV Resort</strong> - Q4 Performance Analysis
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Pool Maintenance SOPs</span>
+                          <Badge variant="default">100% Complete</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h4 data-testid={`text-incident-${incident.id}`} className="font-semibold text-slate-900">
-                              {incident.title}
-                            </h4>
-                            <span className="text-xs text-slate-500">
-                              {new Date(incident.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <p className="text-sm text-slate-600 mt-1">
-                            {incident.description}
-                          </p>
-                          <div className="flex items-center justify-between mt-3">
-                            <div className="flex items-center space-x-4">
-                              <span className="text-xs text-slate-500">
-                                Reporter: <span className="font-medium">{incident.reporter?.firstName} {incident.reporter?.lastName}</span>
-                              </span>
-                              <Badge 
-                                className={
-                                  incident.status === 'open' ? 'bg-warning text-white' :
-                                  incident.status === 'resolved' ? 'bg-success text-white' :
-                                  'bg-slate-500 text-white'
-                                }
-                              >
-                                {incident.status.replace('_', ' ')}
-                              </Badge>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Button data-testid={`button-view-incident-${incident.id}`} variant="ghost" size="sm" className="text-primary hover:text-blue-700">
-                                <Eye className="mr-1" size={16} />
-                                Details
-                              </Button>
-                              <Button data-testid={`button-export-incident-${incident.id}`} variant="ghost" size="sm" className="text-secondary hover:text-green-700">
-                                <Download className="mr-1" size={16} />
-                                Export
-                              </Button>
-                            </div>
-                          </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Guest Services Rating</span>
+                          <Badge variant="default">4.8/5.0</Badge>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Employee Satisfaction</span>
+                          <Badge variant="secondary">89%</Badge>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <Download className="h-4 w-4 mr-2" />
+                        Generate Full Report
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-          {/* System Overview */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* White Label Management */}
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900">White Label Properties</h3>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-slate-900">RV Park Solutions</p>
-                      <p className="text-sm text-slate-600">23 employees</p>
-                    </div>
-                    <div className="w-3 h-3 bg-success rounded-full"></div>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-slate-900">Mountain View Resort</p>
-                      <p className="text-sm text-slate-600">15 employees</p>
-                    </div>
-                    <div className="w-3 h-3 bg-success rounded-full"></div>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-slate-900">Lakeside Camping</p>
-                      <p className="text-sm text-slate-600">9 employees</p>
-                    </div>
-                    <div className="w-3 h-3 bg-warning rounded-full"></div>
-                  </div>
-                </div>
-                <Button 
-                  data-testid="button-add-property"
-                  className="w-full mt-4 bg-primary hover:bg-blue-700 text-white py-2 px-4 font-medium text-sm"
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
-                  <Plus className="mr-2" size={16} />
-                  Add Property
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* System Monitoring */}
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900">System Monitoring</h3>
+                  <Card className="h-full cursor-pointer hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TriangleAlert className="h-5 w-5" />
+                        Operational Insights
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          <div>
+                            <p className="text-sm font-medium">Peak Season Preparation</p>
+                            <p className="text-xs text-muted-foreground">87% Complete</p>
+                          </div>
+                          <Badge variant="secondary">In Progress</Badge>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                          <div>
+                            <p className="text-sm font-medium">Staff Training Module</p>
+                            <p className="text-xs text-muted-foreground">2 employees pending</p>
+                          </div>
+                          <Badge variant="secondary">Action Needed</Badge>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Detailed Analysis
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </div>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Database Security</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-success rounded-full"></div>
-                      <span className="text-sm font-medium text-success">Secure</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Data Backup</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-success rounded-full"></div>
-                      <span className="text-sm font-medium text-success">Up to Date</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">API Status</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-success rounded-full"></div>
-                      <span className="text-sm font-medium text-success">Operational</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-600">Notifications</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-warning rounded-full"></div>
-                      <span className="text-sm font-medium text-warning">3 Pending</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            </motion.div>
+          </TabsContent>
 
-            {/* Quick Actions */}
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900">Quick Actions</h3>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-3">
-                  <Button 
-                    data-testid="button-analytics"
-                    className="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 font-medium text-sm justify-start"
-                  >
-                    <BarChart className="mr-2" size={16} />
-                    Analytics Report
-                  </Button>
-                  <Button 
-                    data-testid="button-export"
-                    className="w-full bg-secondary hover:bg-green-700 text-white py-2 px-4 font-medium text-sm justify-start"
-                  >
-                    <Download className="mr-2" size={16} />
-                    Export Data
-                  </Button>
-                  <Button 
-                    data-testid="button-settings"
-                    className="w-full bg-slate-600 hover:bg-slate-700 text-white py-2 px-4 font-medium text-sm justify-start"
-                  >
-                    <Settings className="mr-2" size={16} />
-                    System Settings
-                  </Button>
-                </div>
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
+          </TabsContent>
+
+          <TabsContent value="properties" className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {properties.map((property, index) => (
+                <motion.div
+                  key={property.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <Card className="cursor-pointer" onClick={() => setSelectedProperty(property.id)}>
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <span>{property.name}</span>
+                        <Badge variant={property.status === 'active' ? 'default' : 'secondary'}>
+                          {property.status}
+                        </Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Employees</span>
+                          <span className="font-medium">{property.employees}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Performance</span>
+                          <span className="font-medium text-green-600">
+                            {property.status === 'active' ? '92%' : 'Setting up...'}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <Card>
+              <CardHeader>
+                <CardTitle>System Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Configure global settings for all properties and company-wide preferences.
+                </p>
+                <Button>Configure Settings</Button>
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
+
+      {/* AI Assistant */}
+      <AIAssistant userRole="owner" />
     </div>
   );
 }

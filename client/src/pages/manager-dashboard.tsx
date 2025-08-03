@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { motion } from "framer-motion";
 import { ArrowLeft, Bell, Clock, Users, ListTodo, TriangleAlert, UserPlus, BarChart, Check, X, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +10,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import TaskAssignment from "@/components/task-assignment";
+import { AnimatedBackground } from "@/components/animated-background";
+import { AIAssistant } from "@/components/ai-assistant";
 
 export default function ManagerDashboard() {
   const [, setLocation] = useLocation();
@@ -65,7 +68,8 @@ export default function ManagerDashboard() {
   const activeTasks = tasks.filter((task: any) => task.status !== 'completed' && task.status !== 'cancelled');
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+      <AnimatedBackground />
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -332,6 +336,9 @@ export default function ManagerDashboard() {
       {showTaskAssignment && (
         <TaskAssignment onClose={() => setShowTaskAssignment(false)} />
       )}
+      
+      {/* AI Assistant */}
+      <AIAssistant userRole="manager" />
     </div>
   );
 }
