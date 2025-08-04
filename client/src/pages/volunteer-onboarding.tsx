@@ -286,27 +286,30 @@ export default function VolunteerOnboarding() {
                     />
                   </div>
 
-                  {/* Charitable Occupancy Agreement */}
+                  {/* Generic Agreement Section */}
                   <div className="border rounded-lg p-6 bg-green-50">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <FileText className="w-5 h-5" />
-                      Charitable Occupancy Agreement
+                      Volunteer Agreement
                     </h3>
                     <div className="prose text-sm mb-4">
                       <p className="mb-3">
                         By signing this agreement, you acknowledge that you are volunteering your time and services 
-                        to {companyConfig.name} on a charitable basis. This agreement outlines the terms of your 
-                        volunteer service.
+                        to {companyConfig.name}. This agreement can be customized based on your organization's needs.
                       </p>
                       <div className="bg-white p-4 rounded border">
-                        <h4 className="font-medium mb-2">Key Terms:</h4>
+                        <h4 className="font-medium mb-2">Standard Terms:</h4>
                         <ul className="list-disc list-inside space-y-1 text-sm">
-                          <li>Volunteer service is provided without expectation of monetary compensation</li>
-                          <li>All volunteer activities must comply with organization policies and procedures</li>
-                          <li>Volunteers are expected to maintain confidentiality and professional conduct</li>
-                          <li>This agreement may be terminated by either party with reasonable notice</li>
-                          <li>Volunteers must follow all safety guidelines and report incidents immediately</li>
+                          <li>Volunteer service terms will be defined by organization requirements</li>
+                          <li>All volunteer activities must comply with organization policies</li>
+                          <li>Volunteers are expected to maintain professional conduct</li>
+                          <li>Agreement terms can be customized using AI-powered document generation</li>
+                          <li>Safety guidelines and incident reporting protocols apply</li>
                         </ul>
+                        <div className="mt-3 p-2 bg-blue-50 rounded text-xs">
+                          <strong>Note:</strong> Agreement content can be automatically generated and customized 
+                          by the owner using AI tools in the system dashboard.
+                        </div>
                       </div>
                     </div>
                     
@@ -320,7 +323,7 @@ export default function VolunteerOnboarding() {
                         data-testid="checkbox-agreement"
                       />
                       <Label htmlFor="agreement" className="text-sm">
-                        I have read and agree to the terms of the Charitable Occupancy Agreement *
+                        I have read and agree to the volunteer agreement terms *
                       </Label>
                     </div>
                   </div>
@@ -376,7 +379,8 @@ export default function VolunteerOnboarding() {
               <h3 className="font-semibold text-blue-900 mb-2">Need Help?</h3>
               <p className="text-blue-700 text-sm">
                 If you have questions about volunteering or need assistance with registration, 
-                please contact our volunteer coordinator at volunteer@{companyConfig.slug}.com
+                please contact the organization directly. Agreement terms and requirements 
+                can be customized by administrators using AI-powered tools.
               </p>
             </CardContent>
           </Card>

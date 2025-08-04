@@ -10,6 +10,7 @@ import {
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { ObjectStorageService } from "./objectStorage";
+import { isOpenAIAvailable, generateDocumentContent, generateTaskSuggestions, analyzeIncident, generateEmployeeAssistance } from "./openai";
 import "./types";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
@@ -993,6 +994,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching stats:", error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // AI Management routes (owner only)
+  app.get("/api/ai/status", authenticateToken, async (req, res) => {
+    try {
+      if (req.user.role !== 'owner') {
+        return res.status(403).json({ message: "Only owners can access AI management" });
+      }
+
+      res.json({
+        available: isOpenAIAvailable(),
+        features: {
+          employeeAssistance: isOpenAIAvailable(),
+          taskSuggestions: isOpenAIAvailable(),
+          incidentAnalysis: isOpenAIAvailable(),
+          documentGeneration: isOpenAIAvailable(),
+        }
+      });
+    } catch (error) {
+      console.error("Error checking AI status:", error);
+      res.status(500).json({ message: "Failed to check AI status" });
+    }
+  });
+
+  app.post("/api/ai/generate-document", authenticateToken, async (req, res) => {
+    try {
+      if (req.user.role !== 'owner') {
+        return res.status(403).json({ message: "Only owners can generate AI documents" });
+      }
+
+      const { prompt } = req.body;
+      if (!prompt) {
+        return res.status(400).json({ message: "Prompt is required" });
+      }
+
+      const content = await generateDocumentContent(prompt);
+      res.json({ content });
+    } catch (error) {
+      console.error("Error generating document:", error);
+      res.status(500).json({ message: error.message || "Failed to generate document" });
+    }
+  });
+
+  app.post("/api/ai/task-suggestions", authenticateToken, async (req, res) => {
+    try {
+      const { context } = req.body;
+      if (!context) {
+        return res.status(400).json({ message: "Context is required" });
+      }
+
+      const suggestions = await generateTaskSuggestions(context);
+      res.json({ suggestions });
+    } catch (error) {
+      console.error("Error generating task suggestions:", error);
+      res.status(500).json({ message: error.message || "Failed to generate suggestions" });
+    }
+  });
+
+  app.post("/api/ai/analyze-incident", authenticateToken, async (req, res) => {
+    try {
+      if (req.user.role === 'employee') {
+        return res.status(403).json({ message: "Insufficient permissions" });
+      }
+
+      const { incidentData } = req.body;
+      if (!incidentData) {
+        return res.status(400).json({ message: "Incident data is required" });
+      }
+
+      const analysis = await analyzeIncident(incidentData);
+      res.json({ analysis });
+    } catch (error) {
+      console.error("Error analyzing incident:", error);
+      res.status(500).json({ message: error.message || "Failed to analyze incident" });
+    }
+  });
+
+  app.post("/api/ai/employee-assistance", authenticateToken, async (req, res) => {
+    try {
+      const { question } = req.body;
+      if (!question) {
+        return res.status(400).json({ message: "Question is required" });
+      }
+
+      const response = await generateEmployeeAssistance(question, req.user.role);
+      res.json({ response });
+    } catch (error) {
+      console.error("Error generating assistance:", error);
+      res.status(500).json({ message: error.message || "Failed to generate assistance" });
     }
   });
 

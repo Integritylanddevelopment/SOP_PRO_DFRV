@@ -1,22 +1,26 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Users, TriangleAlert, Building, Settings, Plus, BarChart, Eye, Download, Zap } from "lucide-react";
+import { ArrowLeft, Users, TriangleAlert, Building, Settings, Plus, BarChart, Eye, Download, Zap, Bot, Key, Power } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import { AnimatedBackground } from "@/components/animated-background";
 import { AIAssistant } from "@/components/ai-assistant";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
 import { getCompanyConfig } from "@/lib/company-config";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function OwnerDashboard() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedProperty, setSelectedProperty] = useState("douglas-forest");
   const companyConfig = getCompanyConfig();
@@ -29,6 +33,31 @@ export default function OwnerDashboard() {
   const { data: incidents = [] } = useQuery({
     queryKey: ['/api/incidents'],
     enabled: !!user && user.role === 'owner',
+  });
+
+  const { data: aiStatus } = useQuery({
+    queryKey: ['/api/ai/status'],
+    enabled: !!user && user.role === 'owner',
+  });
+
+  const generateDocumentMutation = useMutation({
+    mutationFn: (prompt: string) => apiRequest('/api/ai/generate-document', {
+      method: 'POST',
+      body: { prompt }
+    }),
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "AI document generated successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to generate document",
+        variant: "destructive"
+      });
+    }
   });
 
   const recentIncidents = incidents.slice(0, 3);
@@ -126,7 +155,7 @@ export default function OwnerDashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6 relative z-10">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart className="h-4 w-4" />
               Overview
@@ -138,6 +167,10 @@ export default function OwnerDashboard() {
             <TabsTrigger value="properties" className="flex items-center gap-2">
               <Building className="h-4 w-4" />
               Properties
+            </TabsTrigger>
+            <TabsTrigger value="ai-management" className="flex items-center gap-2">
+              <Bot className="h-4 w-4" />
+              AI Control
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -339,6 +372,124 @@ export default function OwnerDashboard() {
                 </motion.div>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="ai-management" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* AI Configuration */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bot className="h-5 w-5" />
+                      AI Configuration
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">AI Assistant Status</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Enable AI-powered assistance for employees and managers
+                        </p>
+                      </div>
+                      <Badge 
+                        variant={aiStatus?.available ? "default" : "secondary"} 
+                        className="flex items-center gap-1"
+                      >
+                        <Power className="h-3 w-3" />
+                        {aiStatus?.available ? "Active" : "Pending Setup"}
+                      </Badge>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4 bg-muted/50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Key className="h-4 w-4" />
+                        <span className="font-medium">OpenAI API Configuration</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Connect your OpenAI API key to enable AI features throughout the system.
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        data-testid="button-configure-ai"
+                        onClick={() => {
+                          toast({
+                            title: "API Configuration",
+                            description: aiStatus?.available 
+                              ? "OpenAI API is configured and active" 
+                              : "OpenAI API key needed for AI features",
+                          });
+                        }}
+                      >
+                        {aiStatus?.available ? "API Configured" : "Configure API Key"}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* AI Features Control */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>AI Features Control</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium">Employee Assistance</span>
+                          <p className="text-xs text-muted-foreground">AI help for employee tasks</p>
+                        </div>
+                        <Badge variant={aiStatus?.features?.employeeAssistance ? "default" : "outline"}>
+                          {aiStatus?.features?.employeeAssistance ? "Enabled" : "Disabled"}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium">Smart Task Suggestions</span>
+                          <p className="text-xs text-muted-foreground">AI-generated task recommendations</p>
+                        </div>
+                        <Badge variant={aiStatus?.features?.taskSuggestions ? "default" : "outline"}>
+                          {aiStatus?.features?.taskSuggestions ? "Enabled" : "Disabled"}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium">Incident Analysis</span>
+                          <p className="text-xs text-muted-foreground">AI-powered incident insights</p>
+                        </div>
+                        <Badge variant={aiStatus?.features?.incidentAnalysis ? "default" : "outline"}>
+                          {aiStatus?.features?.incidentAnalysis ? "Enabled" : "Disabled"}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium">Document Generation</span>
+                          <p className="text-xs text-muted-foreground">AI paperwork and form creation</p>
+                        </div>
+                        <Badge variant={aiStatus?.features?.documentGeneration ? "default" : "outline"}>
+                          {aiStatus?.features?.documentGeneration ? "Enabled" : "Disabled"}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-3 border-t">
+                      <p className="text-sm text-muted-foreground">
+                        Configure your OpenAI API key to enable these features. You maintain full control over AI usage.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </motion.div>
           </TabsContent>
 
           <TabsContent value="settings">
