@@ -648,6 +648,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return responses[userRole as keyof typeof responses] || "How can I assist you today?";
   }
 
+  // Handbook policy completion routes
+  app.post("/api/handbook/policy-completion", authenticateToken, async (req, res) => {
+    try {
+      const { sectionId, policyId, completed, completedAt } = req.body;
+      
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const completionData = {
+        userId: req.user.id,
+        handbookSectionId: sectionId,
+        policyId,
+        completed,
+        completedAt: completed ? new Date(completedAt) : null,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      };
+
+      const result = await storage.createUserPolicyCompletion(completionData);
+      res.json(result);
+    } catch (error) {
+      console.error("Error saving policy completion:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/handbook/signature", authenticateToken, async (req, res) => {
+    try {
+      const { sectionId, signedAt } = req.body;
+      
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const signatureData = {
+        userId: req.user.id,
+        handbookSectionId: sectionId,
+        signatureData: 'digital-signature',
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent'),
+        signedAt: new Date(signedAt)
+      };
+
+      const result = await storage.createUserSignature(signatureData);
+      res.json(result);
+    } catch (error) {
+      console.error("Error saving section signature:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get("/api/handbook/sections", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const sections = await storage.getHandbookSections(req.user.companyId);
+      res.json(sections);
+    } catch (error) {
+      console.error("Error fetching handbook sections:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

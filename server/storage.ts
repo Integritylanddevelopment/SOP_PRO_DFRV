@@ -80,6 +80,11 @@ export interface IStorage {
   getCrossRoleMessages?(companyId: string, userRole: string): Promise<any[]>;
   createDashboardConfig?(data: any): Promise<any>;
   createAiFeature?(data: any): Promise<any>;
+  
+  // Policy completion tracking
+  getUserPolicyCompletions(userId: string, sectionId: string): Promise<any[]>;
+  createUserPolicyCompletion(data: any): Promise<any>;
+  updateUserPolicyCompletion(userId: string, sectionId: string, policyId: string, completed: boolean): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {

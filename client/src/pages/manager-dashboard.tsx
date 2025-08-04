@@ -1,344 +1,565 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { motion } from "framer-motion";
-import { ArrowLeft, Bell, Clock, Users, ListTodo, TriangleAlert, UserPlus, BarChart, Check, X, Eye } from "lucide-react";
+import { ArrowLeft, Users, Calendar, CheckCircle2, Clock, AlertTriangle, BarChart3, Eye, ChevronDown, ChevronRight, UserCheck, UserX, BookOpen, ClipboardList, Shield, AlertCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Progress } from "@/components/ui/progress";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useAuth } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import TaskAssignment from "@/components/task-assignment";
-import { AnimatedBackground } from "@/components/animated-background";
-import { AIAssistant } from "@/components/ai-assistant";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface Employee {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  status: 'pending' | 'approved' | 'active' | 'inactive';
+  onboardingCompleted: boolean;
+  handbookCompleted: boolean;
+  lastActive?: string;
+  profilePhoto?: string;
+}
+
+interface TaskSummary {
+  total: number;
+  completed: number;
+  pending: number;
+  overdue: number;
+}
+
+interface Stats {
+  totalEmployees: number;
+  pendingApprovals: number;
+  activeEmployees: number;
+  openTasks: number;
+  activeIncidents: number;
+  complianceRate: number;
+  trainingProgress: number;
+}
 
 export default function ManagerDashboard() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [showTaskAssignment, setShowTaskAssignment] = useState(false);
-
-  const { data: stats } = useQuery({
-    queryKey: ['/api/stats'],
-    enabled: !!user && (user.role === 'manager' || user.role === 'owner'),
+  
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    'team-overview': false,
+    'pending-approvals': false,
+    'active-today': false,
+    'compliance-tracking': false,
+    'task-management': false,
+    'incident-reports': false
   });
 
-  const { data: pendingUsers = [] } = useQuery({
+  // Check authorization
+  const canAccessManager = user?.role === 'manager' || user?.role === 'owner';
+
+  const { data: stats = {} as Stats } = useQuery({
+    queryKey: ['/api/stats'],
+    enabled: canAccessManager,
+  });
+
+  const { data: employees = [] as Employee[] } = useQuery({
+    queryKey: ['/api/users/company'],
+    enabled: canAccessManager,
+  });
+
+  const { data: pendingUsers = [] as Employee[] } = useQuery({
     queryKey: ['/api/users/pending'],
-    enabled: !!user && (user.role === 'manager' || user.role === 'owner'),
+    enabled: canAccessManager,
   });
 
   const { data: tasks = [] } = useQuery({
     queryKey: ['/api/tasks'],
-    enabled: !!user && (user.role === 'manager' || user.role === 'owner'),
+    enabled: canAccessManager,
+  });
+
+  const { data: incidents = [] } = useQuery({
+    queryKey: ['/api/incidents'],
+    enabled: canAccessManager,
   });
 
   const approveUserMutation = useMutation({
     mutationFn: async (userId: string) => {
-      const response = await apiRequest("POST", `/api/users/${userId}/approve`, {});
+      const response = await apiRequest("PATCH", `/api/users/${userId}`, {
+        status: 'approved'
+      });
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/users/pending'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
       queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
-      toast({ title: "User approved successfully", variant: "default" });
-    },
-    onError: () => {
-      toast({ title: "Failed to approve user", variant: "destructive" });
-    },
+      toast({
+        title: "User Approved",
+        description: "Employee has been approved and can now access the handbook.",
+      });
+    }
   });
 
-  const rejectUserMutation = useMutation({
-    mutationFn: async (userId: string) => {
-      const response = await apiRequest("POST", `/api/users/${userId}/reject`, {});
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/users/pending'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/stats'] });
-      toast({ title: "User rejected", variant: "default" });
-    },
-    onError: () => {
-      toast({ title: "Failed to reject user", variant: "destructive" });
-    },
-  });
+  const toggleSection = (sectionId: string) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
 
-  const activeTasks = tasks.filter((task: any) => task.status !== 'completed' && task.status !== 'cancelled');
+  const getActiveToday = () => {
+    const today = new Date().toDateString();
+    return employees.filter((emp: Employee) => 
+      emp.lastActive && new Date(emp.lastActive).toDateString() === today
+    );
+  };
+
+  const getComplianceStatus = (employee: Employee) => {
+    if (!employee.onboardingCompleted) return { status: 'onboarding', color: 'bg-yellow-100 text-yellow-800' };
+    if (employee.status === 'pending') return { status: 'pending approval', color: 'bg-orange-100 text-orange-800' };
+    if (!employee.handbookCompleted) return { status: 'handbook pending', color: 'bg-blue-100 text-blue-800' };
+    return { status: 'compliant', color: 'bg-green-100 text-green-800' };
+  };
+
+  const getSectionIcon = (sectionId: string) => {
+    const icons = {
+      'team-overview': <Users className="w-5 h-5" />,
+      'pending-approvals': <UserCheck className="w-5 h-5" />,
+      'active-today': <Calendar className="w-5 h-5" />,
+      'compliance-tracking': <Shield className="w-5 h-5" />,
+      'task-management': <ClipboardList className="w-5 h-5" />,
+      'incident-reports': <AlertTriangle className="w-5 h-5" />
+    };
+    return icons[sectionId as keyof typeof icons] || <Users className="w-5 h-5" />;
+  };
+
+  if (!canAccessManager) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4" data-testid="text-access-denied">
+              Access Denied
+            </h2>
+            <p className="text-gray-600 mb-6">
+              You need manager or owner privileges to access this dashboard.
+            </p>
+            <Button 
+              onClick={() => setLocation('/role-selector')} 
+              variant="outline"
+              data-testid="button-back-dashboard"
+            >
+              Back to Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
-      <AnimatedBackground />
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button 
-                data-testid="button-back"
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setLocation('/')}
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h1 className="text-xl font-semibold text-slate-900">Manager Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Button variant="ghost" size="sm" className="relative">
-                  <Bell className="h-5 w-5" />
-                  {stats?.pendingApprovals > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white text-xs font-bold rounded-full flex items-center justify-center">
-                      {stats.pendingApprovals}
-                    </span>
-                  )}
-                </Button>
-              </div>
-              <div className="text-sm text-slate-600">
-                <span data-testid="text-username" className="font-medium">{user?.firstName} {user?.lastName}</span>
-                <div className="text-xs text-slate-500">Manager</div>
-              </div>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation('/role-selector')}
+            className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            data-testid="button-back-dashboard"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Button>
+          
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2" data-testid="text-manager-dashboard">
+              Manager Dashboard
+            </h1>
+            <p className="text-gray-600" data-testid="text-manager-subtitle">
+              Employee management and oversight center
+            </p>
           </div>
+
+          {/* Quick Stats Overview */}
+          {stats && (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Total Employees</p>
+                      <p className="text-2xl font-bold" data-testid="stat-total-employees">{stats.totalEmployees}</p>
+                    </div>
+                    <Users className="w-8 h-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Pending Approvals</p>
+                      <p className="text-2xl font-bold text-orange-600" data-testid="stat-pending-approvals">{stats.pendingApprovals}</p>
+                    </div>
+                    <UserCheck className="w-8 h-8 text-orange-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Compliance Rate</p>
+                      <p className="text-2xl font-bold text-green-600" data-testid="stat-compliance-rate">{stats.complianceRate}%</p>
+                    </div>
+                    <Shield className="w-8 h-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Active Incidents</p>
+                      <p className="text-2xl font-bold text-red-600" data-testid="stat-active-incidents">{stats.activeIncidents}</p>
+                    </div>
+                    <AlertTriangle className="w-8 h-8 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto p-4 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Quick Stats */}
-          <div className="lg:col-span-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Pending Approvals</p>
-                      <p data-testid="stat-pending" className="text-3xl font-bold text-slate-900">
-                        {stats?.pendingApprovals || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-warning rounded-full flex items-center justify-center">
-                      <Clock className="text-white text-xl" size={24} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Active Employees</p>
-                      <p data-testid="stat-employees" className="text-3xl font-bold text-slate-900">
-                        {stats?.activeEmployees || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-success rounded-full flex items-center justify-center">
-                      <Users className="text-white text-xl" size={24} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Open ListTodo</p>
-                      <p data-testid="stat-tasks" className="text-3xl font-bold text-slate-900">
-                        {stats?.openTasks || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                      <ListTodo className="text-white text-xl" size={24} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-slate-600">Incidents Today</p>
-                      <p data-testid="stat-incidents" className="text-3xl font-bold text-slate-900">
-                        {stats?.activeIncidents || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center">
-                      <TriangleAlert className="text-white text-xl" size={24} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="shadow-lg sticky top-8">
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <Button 
-                    data-testid="button-add-employee"
-                    className="w-full bg-primary hover:bg-blue-700 text-white py-3 px-4 font-medium text-sm h-auto justify-start"
-                  >
-                    <UserPlus className="mr-2" size={16} />
-                    Add Employee
-                  </Button>
-                  <Button 
-                    data-testid="button-assign-task"
-                    onClick={() => setShowTaskAssignment(true)}
-                    className="w-full bg-secondary hover:bg-green-700 text-white py-3 px-4 font-medium text-sm h-auto justify-start"
-                  >
-                    <ListTodo className="mr-2" size={16} />
-                    Assign Task
-                  </Button>
-                  <Button 
-                    data-testid="button-reports"
-                    className="w-full bg-slate-600 hover:bg-slate-700 text-white py-3 px-4 font-medium text-sm h-auto justify-start"
-                  >
-                    <BarChart className="mr-2" size={16} />
-                    View Reports
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Pending Approvals */}
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-slate-900">Pending Employee Approvals</h3>
-                  <Badge className="bg-warning text-white">
-                    {pendingUsers.length} Pending
-                  </Badge>
-                </div>
-              </div>
-              <CardContent className="p-6">
-                {pendingUsers.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    No pending approvals
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {pendingUsers.map((employee: any) => (
-                      <div key={employee.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center">
-                            <Users className="text-slate-600" size={20} />
-                          </div>
-                          <div>
-                            <h4 data-testid={`text-employee-${employee.id}`} className="font-semibold text-slate-900">
-                              {employee.firstName} {employee.lastName}
-                            </h4>
-                            <p className="text-sm text-slate-600">{employee.position}</p>
-                            <p className="text-xs text-slate-500">
-                              Submitted: {new Date(employee.createdAt).toLocaleDateString()}
-                            </p>
-                          </div>
+        {/* Dropdown-Style Management Sections */}
+        <div className="space-y-4">
+          {/* Pending Approvals Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Card className={pendingUsers.length > 0 ? 'ring-2 ring-orange-200 bg-orange-50/30' : ''}>
+              <Collapsible open={openSections['pending-approvals']} onOpenChange={() => toggleSection('pending-approvals')}>
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          {openSections['pending-approvals'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                          {getSectionIcon('pending-approvals')}
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Button 
-                            data-testid={`button-approve-${employee.id}`}
-                            onClick={() => approveUserMutation.mutate(employee.id)}
-                            disabled={approveUserMutation.isPending}
-                            className="bg-success hover:bg-green-700 text-white px-4 py-2 font-medium text-sm"
-                          >
-                            <Check className="mr-1" size={16} />
-                            Approve
-                          </Button>
-                          <Button 
-                            data-testid={`button-reject-${employee.id}`}
-                            onClick={() => rejectUserMutation.mutate(employee.id)}
-                            disabled={rejectUserMutation.isPending}
-                            className="bg-accent hover:bg-red-700 text-white px-4 py-2 font-medium text-sm"
-                          >
-                            <X className="mr-1" size={16} />
-                            Reject
-                          </Button>
-                          <Button 
-                            data-testid={`button-view-${employee.id}`}
-                            variant="ghost" 
-                            size="sm"
-                          >
-                            <Eye size={16} />
-                          </Button>
+                        <div>
+                          <CardTitle className="text-lg flex items-center gap-2" data-testid="section-pending-approvals">
+                            Pending Employee Approvals
+                            {pendingUsers.length > 0 && (
+                              <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                                {pendingUsers.length} pending
+                              </Badge>
+                            )}
+                          </CardTitle>
+                          <p className="text-sm text-gray-600">Employees waiting for manager approval to access handbook</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    {pendingUsers.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-green-500" />
+                        <p>No pending approvals. All employees are approved!</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {pendingUsers.map((employee: Employee) => (
+                          <div key={employee.id} className="flex items-center justify-between p-4 bg-white border rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                {employee.profilePhoto ? (
+                                  <img src={employee.profilePhoto} alt="" className="w-10 h-10 rounded-full object-cover" />
+                                ) : (
+                                  <span className="text-sm font-medium">
+                                    {employee.firstName[0]}{employee.lastName[0]}
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium" data-testid={`name-${employee.id}`}>
+                                  {employee.firstName} {employee.lastName}
+                                </p>
+                                <p className="text-sm text-gray-600">{employee.email}</p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Badge variant="outline" className="text-xs">
+                                    {employee.onboardingCompleted ? 'Onboarding Complete' : 'Onboarding Pending'}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                onClick={() => approveUserMutation.mutate(employee.id)}
+                                disabled={approveUserMutation.isPending || !employee.onboardingCompleted}
+                                size="sm"
+                                data-testid={`button-approve-${employee.id}`}
+                              >
+                                {approveUserMutation.isPending ? 'Approving...' : 'Approve'}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setLocation(`/employee-details/${employee.id}`)}
+                                data-testid={`button-view-${employee.id}`}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
             </Card>
+          </motion.div>
 
-            {/* Active ListTodo Overview */}
-            <Card className="shadow-lg">
-              <div className="p-6 border-b border-slate-200">
-                <h3 className="text-lg font-semibold text-slate-900">Active ListTodo</h3>
-              </div>
-              <CardContent className="p-6">
-                {activeTasks.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    No active tasks
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {activeTasks.slice(0, 5).map((task: any) => (
-                      <div key={task.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                            <ListTodo className="text-white" size={20} />
-                          </div>
-                          <div>
-                            <h4 data-testid={`text-task-${task.id}`} className="font-semibold text-slate-900">
-                              {task.title}
-                            </h4>
-                            <p className="text-sm text-slate-600">
-                              Assigned to: <span className="font-medium">{task.assignedToUser?.firstName} {task.assignedToUser?.lastName}</span>
-                            </p>
-                            <p className="text-xs text-slate-500">
-                              Due: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}
-                            </p>
-                          </div>
+          {/* Active Today Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card>
+              <Collapsible open={openSections['active-today']} onOpenChange={() => toggleSection('active-today')}>
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          {openSections['active-today'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                          {getSectionIcon('active-today')}
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge 
-                            className={
-                              task.status === 'in_progress' ? 'bg-warning text-white' :
-                              task.status === 'completed' ? 'bg-success text-white' :
-                              'bg-slate-500 text-white'
-                            }
-                          >
-                            {task.status.replace('_', ' ')}
-                          </Badge>
-                          <Button variant="ghost" size="sm">
-                            <Eye size={16} />
-                          </Button>
+                        <div>
+                          <CardTitle className="text-lg" data-testid="section-active-today">
+                            Who's Working Today
+                            <Badge variant="secondary" className="ml-2">
+                              {getActiveToday().length} active
+                            </Badge>
+                          </CardTitle>
+                          <p className="text-sm text-gray-600">Employees who have been active today</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    {getActiveToday().length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <Clock className="w-12 h-12 mx-auto mb-4" />
+                        <p>No employees have been active today yet.</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {getActiveToday().map((employee: Employee) => (
+                          <div key={employee.id} className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-medium">
+                                  {employee.firstName[0]}{employee.lastName[0]}
+                                </span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium" data-testid={`active-${employee.id}`}>
+                                  {employee.firstName} {employee.lastName}
+                                </p>
+                                <p className="text-xs text-gray-600">
+                                  Last seen: {employee.lastActive ? new Date(employee.lastActive).toLocaleTimeString() : 'Recently'}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
             </Card>
-          </div>
+          </motion.div>
+
+          {/* Team Overview Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card>
+              <Collapsible open={openSections['team-overview']} onOpenChange={() => toggleSection('team-overview')}>
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          {openSections['team-overview'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                          {getSectionIcon('team-overview')}
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg" data-testid="section-team-overview">
+                            All Team Members
+                            <Badge variant="secondary" className="ml-2">
+                              {employees.length} total
+                            </Badge>
+                          </CardTitle>
+                          <p className="text-sm text-gray-600">Complete team overview and management</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    <div className="space-y-3">
+                      {employees.map((employee: Employee) => {
+                        const compliance = getComplianceStatus(employee);
+                        return (
+                          <div key={employee.id} className="flex items-center justify-between p-4 bg-white border rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                {employee.profilePhoto ? (
+                                  <img src={employee.profilePhoto} alt="" className="w-10 h-10 rounded-full object-cover" />
+                                ) : (
+                                  <span className="text-sm font-medium">
+                                    {employee.firstName[0]}{employee.lastName[0]}
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium" data-testid={`team-name-${employee.id}`}>
+                                  {employee.firstName} {employee.lastName}
+                                </p>
+                                <p className="text-sm text-gray-600">{employee.email}</p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Badge variant="outline" className={`text-xs ${compliance.color}`}>
+                                    {compliance.status}
+                                  </Badge>
+                                  <Badge variant="outline" className="text-xs">
+                                    {employee.role}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setLocation(`/employee-details/${employee.id}`)}
+                                data-testid={`button-details-${employee.id}`}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
+            </Card>
+          </motion.div>
+
+          {/* Compliance Tracking Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Card>
+              <Collapsible open={openSections['compliance-tracking']} onOpenChange={() => toggleSection('compliance-tracking')}>
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          {openSections['compliance-tracking'] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                          {getSectionIcon('compliance-tracking')}
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg" data-testid="section-compliance">
+                            Compliance Tracking
+                            {stats && (
+                              <Badge variant="secondary" className="ml-2">
+                                {stats.complianceRate}% compliant
+                              </Badge>
+                            )}
+                          </CardTitle>
+                          <p className="text-sm text-gray-600">Track handbook completion and training progress</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h4 className="font-medium mb-3">Handbook Completion</h4>
+                        <div className="space-y-2">
+                          {employees.map((employee: Employee) => (
+                            <div key={employee.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <span className="text-sm" data-testid={`compliance-name-${employee.id}`}>
+                                {employee.firstName} {employee.lastName}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                {employee.handbookCompleted ? (
+                                  <Badge className="bg-green-100 text-green-800 text-xs">Complete</Badge>
+                                ) : employee.onboardingCompleted ? (
+                                  <Badge className="bg-yellow-100 text-yellow-800 text-xs">In Progress</Badge>
+                                ) : (
+                                  <Badge className="bg-gray-100 text-gray-800 text-xs">Not Started</Badge>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium mb-3">Training Progress</h4>
+                        {stats && (
+                          <div className="p-4 bg-blue-50 rounded-lg">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium">Overall Progress</span>
+                              <span className="text-sm text-blue-600">{stats.trainingProgress}%</span>
+                            </div>
+                            <Progress value={stats.trainingProgress} className="h-2" />
+                            <p className="text-xs text-gray-600 mt-2">
+                              Based on handbook signatures and SOP completions
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
+            </Card>
+          </motion.div>
         </div>
       </div>
-
-      {/* Task Assignment Modal */}
-      {showTaskAssignment && (
-        <TaskAssignment onClose={() => setShowTaskAssignment(false)} />
-      )}
-      
-      {/* AI Assistant */}
-      <AIAssistant userRole="manager" />
     </div>
   );
 }

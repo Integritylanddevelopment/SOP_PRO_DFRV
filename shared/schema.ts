@@ -35,6 +35,11 @@ export const users = pgTable("users", {
   status: text("status").$type<"pending" | "approved" | "rejected" | "active" | "inactive">().default("pending").notNull(),
   approvedBy: uuid("approved_by"),
   approvedAt: timestamp("approved_at"),
+  onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
+  onboardingCompletedAt: timestamp("onboarding_completed_at"),
+  handbookCompleted: boolean("handbook_completed").default(false).notNull(),
+  handbookCompletedAt: timestamp("handbook_completed_at"),
+  profilePhotoUrl: text("profile_photo_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -47,7 +52,13 @@ export const handbookSections = pgTable("handbook_sections", {
   content: text("content").notNull(),
   sectionNumber: integer("section_number").notNull(),
   requiresSignature: boolean("requires_signature").default(true).notNull(),
-  category: text("category"),
+  category: text("category").$type<"company_policies" | "safety" | "daily_procedures" | "emergency_protocols">(),
+  policies: jsonb("policies").$type<Array<{
+    id: string;
+    title: string;
+    content: string;
+    required: boolean;
+  }>>(),
   isActive: boolean("is_active").default(true).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -62,6 +73,18 @@ export const userSignatures = pgTable("user_signatures", {
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   signedAt: timestamp("signed_at").defaultNow().notNull(),
+});
+
+// User policy completions for tracking individual policy checkboxes
+export const userPolicyCompletions = pgTable("user_policy_completions", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  handbookSectionId: uuid("handbook_section_id").references(() => handbookSections.id).notNull(),
+  policyId: text("policy_id").notNull(),
+  completed: boolean("completed").default(false).notNull(),
+  completedAt: timestamp("completed_at"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
 });
 
 // Standard Operating Procedures
@@ -379,6 +402,11 @@ export const insertUserSignatureSchema = createInsertSchema(userSignatures).omit
   signedAt: true,
 });
 
+export const insertUserPolicyCompletionSchema = createInsertSchema(userPolicyCompletions).omit({
+  id: true,
+  completedAt: true,
+});
+
 export const insertSopSchema = createInsertSchema(sops).omit({
   id: true,
   createdAt: true,
@@ -426,6 +454,9 @@ export type InsertHandbookSection = z.infer<typeof insertHandbookSectionSchema>;
 
 export type UserSignature = typeof userSignatures.$inferSelect;
 export type InsertUserSignature = z.infer<typeof insertUserSignatureSchema>;
+
+export type UserPolicyCompletion = typeof userPolicyCompletions.$inferSelect;
+export type InsertUserPolicyCompletion = z.infer<typeof insertUserPolicyCompletionSchema>;
 
 export type Sop = typeof sops.$inferSelect;
 export type InsertSop = z.infer<typeof insertSopSchema>;
