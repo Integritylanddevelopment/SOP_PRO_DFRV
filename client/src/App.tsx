@@ -11,6 +11,8 @@ import EmployeeHandbook from "@/pages/employee-handbook";
 import SopSystem from "@/pages/sop-system";
 import ManagerDashboard from "@/pages/manager-dashboard";
 import OwnerDashboard from "@/pages/owner-dashboard";
+import OnboardingWizard from "@/pages/onboarding-wizard";
+import AdvancedReporting from "@/pages/advanced-reporting";
 import { AuthProvider } from "@/hooks/use-auth";
 
 function Router() {
@@ -23,6 +25,8 @@ function Router() {
       <Route path="/employee/sops" component={SopSystem} />
       <Route path="/manager/dashboard" component={ManagerDashboard} />
       <Route path="/owner/dashboard" component={OwnerDashboard} />
+      <Route path="/onboarding" component={OnboardingWizard} />
+      <Route path="/advanced-reporting" component={AdvancedReporting} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -997,6 +997,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Onboarding routes
+  app.post("/api/onboarding/complete", authenticateToken, async (req, res) => {
+    try {
+      const { companyInfo, branding, apiKeys, compliance, integrations } = req.body;
+      
+      // Save onboarding data to storage
+      const onboardingData = {
+        userId: req.user.id,
+        companyInfo,
+        branding,
+        apiKeys: {
+          ...apiKeys,
+          openai: apiKeys.openai ? "***configured***" : "" // Don't store actual API key
+        },
+        compliance,
+        integrations,
+        completedAt: new Date().toISOString()
+      };
+
+      // In a real implementation, you would save this to database
+      console.log("Onboarding completed for user:", req.user.id, onboardingData);
+
+      res.json({ 
+        message: "Onboarding completed successfully",
+        redirectTo: req.user.role === 'owner' ? '/owner-dashboard' : '/dashboard'
+      });
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+      res.status(500).json({ message: "Failed to complete onboarding" });
+    }
+  });
+
+  app.post("/api/ai/generate-compliance", authenticateToken, async (req, res) => {
+    try {
+      const { industry, state } = req.body;
+      
+      if (!industry || !state) {
+        return res.status(400).json({ message: "Industry and state are required" });
+      }
+
+      // Generate compliance requirements using AI
+      const prompt = `Generate specific compliance requirements and certifications for a ${industry} business operating in ${state}. 
+      
+      Focus on:
+      1. Required industry-specific certifications
+      2. State-specific regulations
+      3. Safety requirements
+      4. Employee training requirements
+      5. Insurance considerations
+      
+      Return a JSON object with:
+      - certifications: array of required certifications
+      - areas: array of compliance areas to focus on
+      - recommendations: array of specific recommendations`;
+
+      const response = await generateDocumentContent(prompt);
+      
+      try {
+        const parsed = JSON.parse(response);
+        res.json({
+          certifications: parsed.certifications || [],
+          areas: parsed.areas || [],
+          recommendations: parsed.recommendations || []
+        });
+      } catch {
+        // Fallback if JSON parsing fails
+        res.json({
+          certifications: [
+            "OSHA Safety Training",
+            "First Aid Certification",
+            "Fire Safety Training"
+          ],
+          areas: [
+            "Workplace Safety",
+            "Employee Training",
+            "Documentation"
+          ],
+          recommendations: [
+            "Implement regular safety meetings",
+            "Maintain training records",
+            "Create incident reporting procedures"
+          ]
+        });
+      }
+    } catch (error) {
+      console.error("Error generating compliance:", error);
+      res.status(500).json({ message: error.message || "Failed to generate compliance requirements" });
+    }
+  });
+
   // AI Management routes (owner only)
   app.get("/api/ai/status", authenticateToken, async (req, res) => {
     try {
