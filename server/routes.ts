@@ -714,6 +714,251 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Manager Dashboard Financial Tracking
+  app.get("/api/revenue-expenses", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      // Mock data for now - would be stored in database
+      const mockData = [
+        {
+          id: "1",
+          date: new Date().toISOString(),
+          type: "revenue",
+          category: "Site Rental",
+          description: "Daily site rentals",
+          amount: 1250,
+          source: "Reservations",
+          createdBy: req.user.id,
+          editHistory: []
+        },
+        {
+          id: "2", 
+          date: new Date().toISOString(),
+          type: "expense",
+          category: "Maintenance",
+          description: "Pool chemical supplies",
+          amount: 85,
+          createdBy: req.user.id,
+          editHistory: []
+        }
+      ];
+      
+      res.json(mockData);
+    } catch (error) {
+      console.error("Error fetching revenue/expenses:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/revenue-expenses", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      const { type, category, description, amount, source } = req.body;
+      
+      const entry = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        type,
+        category,
+        description,
+        amount,
+        source,
+        createdBy: req.user.id,
+        editHistory: []
+      };
+
+      // Would save to database in real implementation
+      res.json(entry);
+    } catch (error) {
+      console.error("Error creating revenue/expense entry:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Duty Assignments
+  app.get("/api/duties", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      // Mock duty assignments
+      const mockDuties = [
+        {
+          id: "duty-1",
+          title: "Weekly Property Inspection",
+          description: "Conduct comprehensive inspection of all facilities, report any maintenance issues",
+          assignedBy: "owner-1",
+          assignedTo: req.user.id,
+          priority: "high",
+          status: "pending",
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: "duty-2",
+          title: "Update Guest Welcome Packets",
+          description: "Review and update all guest information packets with new amenity details",
+          assignedBy: "owner-1",
+          assignedTo: req.user.id,
+          priority: "medium",
+          status: "in_progress",
+          dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      ];
+      
+      res.json(mockDuties);
+    } catch (error) {
+      console.error("Error fetching duties:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.patch("/api/duties/:dutyId", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      const { dutyId } = req.params;
+      const { status } = req.body;
+      
+      // Would update in database
+      const updatedDuty = {
+        id: dutyId,
+        status,
+        updatedAt: new Date().toISOString()
+      };
+
+      res.json(updatedDuty);
+    } catch (error) {
+      console.error("Error updating duty:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Messaging System
+  app.get("/api/messages", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      // Mock messages
+      const mockMessages = [
+        {
+          id: "msg-1",
+          from: req.user.id,
+          to: "owner-1",
+          subject: "Budget Request: Pool Heater Repair",
+          content: "The main pool heater needs immediate repair. Estimated cost is $1,200. This is affecting guest satisfaction.",
+          priority: "high",
+          status: "unread",
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          type: "budget_request"
+        },
+        {
+          id: "msg-2",
+          from: "owner-1",
+          to: req.user.id,
+          subject: "Re: Weekly Report",
+          content: "Great job on the occupancy rates this week. Keep up the excellent work!",
+          priority: "medium",
+          status: "read",
+          createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          type: "general"
+        }
+      ];
+      
+      res.json(mockMessages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/messages", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const { to, subject, content, priority, type } = req.body;
+      
+      const message = {
+        id: Date.now().toString(),
+        from: req.user.id,
+        to,
+        subject,
+        content,
+        priority,
+        type,
+        status: 'unread',
+        createdAt: new Date().toISOString()
+      };
+
+      // Would save to database
+      res.json(message);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Schedule Management
+  app.get("/api/schedule", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      // Mock schedule data
+      const mockSchedule = [];
+      res.json(mockSchedule);
+    } catch (error) {
+      console.error("Error fetching schedule:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Enhanced stats endpoint with financial data
+  app.get("/api/stats", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user || (req.user.role !== 'manager' && req.user.role !== 'owner')) {
+        return res.status(403).json({ message: "Manager or owner access required" });
+      }
+
+      const stats = {
+        totalEmployees: 8,
+        pendingApprovals: 2,
+        activeEmployees: 6,
+        openTasks: 5,
+        activeIncidents: 1,
+        complianceRate: 85,
+        trainingProgress: 72,
+        currentOccupancy: 23,
+        dailyRevenue: 1850,
+        weeklyRevenue: 12400,
+        monthlyRevenue: 48900,
+        dailyExpenses: 320,
+        weeklyExpenses: 2240,
+        monthlyExpenses: 8960
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

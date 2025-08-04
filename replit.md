@@ -11,7 +11,7 @@ Workflow Pro is a comprehensive white-label employee management and onboarding s
 - Multi-tenant database architecture
 - Easy fork-and-deploy workflow for new companies
 
-The system provides digital employee handbook management with signature tracking, Standard Operating Procedures (SOPs) with step-by-step execution tracking, task assignment and management, incident reporting, and comprehensive dashboard analytics. Built as a full-stack web application with modern React frontend and Express.js backend, it supports multiple companies through a white-label architecture.
+The system provides digital employee handbook management with signature tracking, Standard Operating Procedures (SOPs) with step-by-step execution tracking, task assignment and management, incident reporting, comprehensive dashboard analytics, revenue/expense tracking with audit trails, duty assignment system, owner-manager messaging capabilities, and employee scheduling management. Built as a full-stack web application with modern React frontend and Express.js backend, it supports multiple companies through a white-label architecture.
 
 ## User Preferences
 
@@ -80,3 +80,31 @@ The application integrates with several external services:
 **UI Component Libraries**: Radix UI primitives for accessible component foundations, Lucide React for consistent iconography, and various specialized components for enhanced user interactions.
 
 The system is designed for deployment flexibility with environment-based configuration and supports both development and production deployment scenarios.
+
+## Recent Updates (January 2025)
+
+**Enhanced Manager Dashboard Features:**
+- Revenue and expense tracking with daily/weekly/monthly reporting
+- Auditable financial entries with edit history tracking
+- Duty assignment system for owner-to-manager task delegation
+- Comprehensive messaging system for owner-manager communications
+- Budget request functionality with priority levels
+- Employee scheduling management with quick actions
+- Real-time occupancy tracking and financial metrics
+- Dropdown-style interface maintaining "huge dropdown menus" user experience
+
+**Financial Management Integration:**
+- Daily, weekly, and monthly revenue/expense categorization
+- Editable and auditable financial entries from both manager and owner perspectives
+- Integration points for external accounting software
+- Current occupancy reporting under quick actions
+
+**Communication System:**
+- Multi-priority messaging (low, medium, high, urgent)
+- Categorized message types (general, budget requests, support requests, duty assignments)
+- Real-time notification badges for unread messages
+- Audit trail for all communications
+
+**Owner Dashboard Analytics:** 
+- Manager performance tracking capabilities
+- Property analytics and performance metrics integration points
