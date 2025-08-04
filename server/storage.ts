@@ -1,6 +1,6 @@
 import { 
   companies, users, handbookSections, userSignatures, sops, sopExecutions, 
-  sopStepCompletions, tasks, incidents, notifications,
+  sopStepCompletions, tasks, incidents, notifications, occupancyAgreements,
   type Company, type InsertCompany,
   type User, type InsertUser,
   type HandbookSection, type InsertHandbookSection,
@@ -10,7 +10,8 @@ import {
   type SopStepCompletion, type InsertSopStepCompletion,
   type Task, type InsertTask,
   type Incident, type InsertIncident,
-  type Notification, type InsertNotification
+  type Notification, type InsertNotification,
+  type OccupancyAgreement, type InsertOccupancyAgreement
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, asc } from "drizzle-orm";
@@ -72,6 +73,12 @@ export interface IStorage {
   getUserNotifications(userId: string): Promise<Notification[]>;
   createNotification(notification: InsertNotification): Promise<Notification>;
   markNotificationRead(id: string): Promise<Notification>;
+
+  // Occupancy Agreements
+  getOccupancyAgreements(userId: string): Promise<OccupancyAgreement[]>;
+  getOccupancyAgreement(id: string): Promise<OccupancyAgreement | undefined>;
+  createOccupancyAgreement(agreement: InsertOccupancyAgreement): Promise<OccupancyAgreement>;
+  updateOccupancyAgreement(id: string, updates: Partial<OccupancyAgreement>): Promise<OccupancyAgreement>;
 
   // AI Features (simplified for now)
   createAiInteraction?(data: any): Promise<any>;
@@ -332,6 +339,51 @@ export class DatabaseStorage implements IStorage {
       .where(eq(notifications.id, id))
       .returning();
     return updatedNotification;
+  }
+
+  // Occupancy Agreements
+  async getOccupancyAgreements(userId: string): Promise<OccupancyAgreement[]> {
+    return await db
+      .select()
+      .from(occupancyAgreements)
+      .where(eq(occupancyAgreements.userId, userId))
+      .orderBy(desc(occupancyAgreements.createdAt));
+  }
+
+  async getOccupancyAgreement(id: string): Promise<OccupancyAgreement | undefined> {
+    const [agreement] = await db
+      .select()
+      .from(occupancyAgreements)
+      .where(eq(occupancyAgreements.id, id));
+    
+    return agreement || undefined;
+  }
+
+  async createOccupancyAgreement(agreement: InsertOccupancyAgreement): Promise<OccupancyAgreement> {
+    const [newAgreement] = await db
+      .insert(occupancyAgreements)
+      .values(agreement)
+      .returning();
+    
+    if (!newAgreement) {
+      throw new Error("Failed to create occupancy agreement");
+    }
+    
+    return newAgreement;
+  }
+
+  async updateOccupancyAgreement(id: string, updates: Partial<OccupancyAgreement>): Promise<OccupancyAgreement> {
+    const [updatedAgreement] = await db
+      .update(occupancyAgreements)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(occupancyAgreements.id, id))
+      .returning();
+    
+    if (!updatedAgreement) {
+      throw new Error("Occupancy agreement not found");
+    }
+    
+    return updatedAgreement;
   }
 
   // AI Features - Basic implementations

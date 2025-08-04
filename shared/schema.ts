@@ -31,7 +31,7 @@ export const users = pgTable("users", {
   ssn: text("ssn"), // Encrypted
   dateOfBirth: timestamp("date_of_birth"),
   position: text("position"),
-  role: text("role").$type<"employee" | "manager" | "owner">().notNull(),
+  role: text("role").$type<"employee" | "volunteer" | "manager" | "owner">().notNull(),
   status: text("status").$type<"pending" | "approved" | "rejected" | "active" | "inactive">().default("pending").notNull(),
   approvedBy: uuid("approved_by"),
   approvedAt: timestamp("approved_at"),
@@ -207,7 +207,31 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   createdTasks: many(tasks, { relationName: "createdTasks" }),
   incidents: many(incidents),
   notifications: many(notifications),
+  occupancyAgreements: many(occupancyAgreements),
 }));
+
+// Charitable Occupancy Agreements for volunteers
+export const occupancyAgreements = pgTable("occupancy_agreements", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  companyId: uuid("company_id").references(() => companies.id).notNull(),
+  agreementType: text("agreement_type").$type<"volunteer" | "employee" | "temporary">().default("volunteer").notNull(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  terms: jsonb("terms").$type<{
+    duration?: string;
+    responsibilities?: string[];
+    benefits?: string[];
+    requirements?: string[];
+  }>(),
+  signatureData: text("signature_data"), // Base64 signature image
+  signedAt: timestamp("signed_at"),
+  status: text("status").$type<"pending" | "signed" | "rejected" | "expired">().default("pending").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
 export const handbookSectionsRelations = relations(handbookSections, ({ one, many }) => ({
   company: one(companies, {
@@ -290,12 +314,23 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   }),
 }));
 
+export const occupancyAgreementsRelations = relations(occupancyAgreements, ({ one }) => ({
+  user: one(users, {
+    fields: [occupancyAgreements.userId],
+    references: [users.id],
+  }),
+  company: one(companies, {
+    fields: [occupancyAgreements.companyId],
+    references: [companies.id],
+  }),
+}));
+
 // AI Interactions and Cross-Role Communication
 export const aiInteractions = pgTable("ai_interactions", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
   companyId: uuid("company_id").references(() => companies.id).notNull(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  userRole: text("user_role").$type<"employee" | "manager" | "owner">().notNull(),
+  userRole: text("user_role").$type<"employee" | "volunteer" | "manager" | "owner">().notNull(),
   message: text("message").notNull(),
   response: text("response").notNull(),
   actionType: text("action_type").$type<"dashboard_reorganize" | "create_task" | "create_message" | "implement_feature" | "gather_info" | "none">(),
@@ -315,7 +350,7 @@ export const dashboardConfigs = pgTable("dashboard_configs", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
   companyId: uuid("company_id").references(() => companies.id).notNull(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  userRole: text("user_role").$type<"employee" | "manager" | "owner">().notNull(),
+  userRole: text("user_role").$type<"employee" | "volunteer" | "manager" | "owner">().notNull(),
   layout: jsonb("layout").$type<{
     widgets: Array<{
       id: string;
@@ -442,6 +477,12 @@ export const insertNotificationSchema = createInsertSchema(notifications).omit({
   createdAt: true,
 });
 
+export const insertOccupancyAgreementSchema = createInsertSchema(occupancyAgreements).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type Company = typeof companies.$inferSelect;
 export type InsertCompany = z.infer<typeof insertCompanySchema>;
@@ -475,6 +516,9 @@ export type InsertIncident = z.infer<typeof insertIncidentSchema>;
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+
+export type OccupancyAgreement = typeof occupancyAgreements.$inferSelect;
+export type InsertOccupancyAgreement = z.infer<typeof insertOccupancyAgreementSchema>;
 
 // AI interaction schemas and types
 export const insertAiInteractionSchema = createInsertSchema(aiInteractions).omit({

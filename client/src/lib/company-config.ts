@@ -30,22 +30,22 @@ export interface CompanyConfig {
 // Load company configuration  
 export const getCompanyConfig = (): CompanyConfig => {
   // In production, this would be loaded from a config service or environment
-  // For now, we'll use the Douglas Forest RV Resort as the default
+  // This is the white-label default - customize for each client
   return {
-    name: "Douglas Forest RV Resort",
-    slug: "douglas-forest-rv",
-    description: "Premier RV resort in the heart of the Pacific Northwest",
-    website: "https://douglasforestrv.com",
-    industry: "Hospitality - RV Resort",
+    name: "Workflow Pro Organization",
+    slug: "workflow-pro",
+    description: "Comprehensive employment management system",
+    website: "https://workflowpro.example.com",
+    industry: "Multi-Purpose Management",
     logo: "/assets/company-logo.png",
     branding: {
-      primary: "hsl(30, 25%, 54%)",
-      secondary: "hsl(90, 50%, 20%)",
-      accent: "hsl(35, 30%, 85%)",
+      primary: "hsl(217, 91%, 60%)", // blue-500
+      secondary: "hsl(217, 83%, 35%)", // blue-800  
+      accent: "hsl(214, 95%, 93%)", // blue-100
       colors: {
-        tan: "#8B7355",
-        forestGreen: "#2D5016",
-        lightTan: "#D4C4A0"
+        primary: "#3b82f6",
+        secondary: "#1e40af", 
+        accent: "#dbeafe"
       }
     },
     features: {
@@ -67,6 +67,22 @@ export const getCompanyConfig = (): CompanyConfig => {
 // Generate industry-specific content templates
 export const getIndustryTemplates = (industry: string) => {
   const templates = {
+    "Multi-Purpose Management": {
+      handbookSections: [
+        "Welcome & Organization Culture",
+        "Roles & Responsibilities", 
+        "Safety & Emergency Procedures",
+        "Communication Standards",
+        "Performance Expectations"
+      ],
+      sopCategories: [
+        "Standard Operations",
+        "Communication Procedures", 
+        "Safety & Compliance",
+        "Quality Standards",
+        "Administrative Tasks"
+      ]
+    },
     "Hospitality - RV Resort": {
       handbookSections: [
         "Welcome & Company Culture",
@@ -81,6 +97,22 @@ export const getIndustryTemplates = (industry: string) => {
         "Grounds & Facility Care",
         "Emergency Response",
         "Equipment Operation"
+      ]
+    },
+    "Non-Profit Organization": {
+      handbookSections: [
+        "Mission & Values",
+        "Volunteer Guidelines",
+        "Community Standards",
+        "Safety & Procedures",
+        "Service Expectations"
+      ],
+      sopCategories: [
+        "Volunteer Onboarding",
+        "Community Outreach",
+        "Event Management",
+        "Administrative Procedures",
+        "Safety Protocols"
       ]
     },
     "Food Service": {

@@ -1,4 +1,4 @@
-import { Building } from "lucide-react";
+import { Building, Heart } from "lucide-react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,6 +34,19 @@ export default function RoleSelector() {
                 <div className="ml-3">
                   <div className="font-semibold">Employee</div>
                   <div className="text-sm opacity-90">Complete onboarding & access handbook</div>
+                </div>
+              </div>
+            </Button>
+
+            <Button 
+              data-testid="button-volunteer"
+              onClick={() => setLocation('/volunteer/onboarding')} 
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 h-auto flex items-center justify-between"
+            >
+              <div className="flex items-center text-left">
+                <div className="ml-3">
+                  <div className="font-semibold">Volunteer</div>
+                  <div className="text-sm opacity-90">Sign charitable agreements & contribute</div>
                 </div>
               </div>
             </Button>

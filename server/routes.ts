@@ -130,6 +130,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ ...req.user, password: undefined });
   });
 
+  // Volunteer registration (no auth required)
+  app.post("/api/volunteers/register", async (req, res) => {
+    try {
+      const volunteerData = insertUserSchema.parse({
+        ...req.body,
+        role: "volunteer",
+        status: "pending",
+        password: "temp-password-" + Date.now() // Volunteers don't need passwords initially
+      });
+      
+      const volunteer = await storage.createUser(volunteerData);
+
+      // Create notification for managers about new volunteer
+      const managers = await storage.getUsersByCompany(volunteer.companyId);
+      const companyManagers = managers.filter(u => u.role === 'manager' || u.role === 'owner');
+      
+      for (const manager of companyManagers) {
+        await storage.createNotification({
+          userId: manager.id,
+          title: "New Volunteer Registration",
+          message: `${volunteer.firstName} ${volunteer.lastName} has registered as a volunteer`,
+          type: "info",
+          relatedEntityType: "user",
+          relatedEntityId: volunteer.id,
+        });
+      }
+
+      res.status(201).json({ 
+        message: "Volunteer registration successful. Thank you for your interest!",
+        userId: volunteer.id 
+      });
+    } catch (error) {
+      console.error("Volunteer registration error:", error);
+      res.status(400).json({ message: "Volunteer registration failed" });
+    }
+  });
+
   // User management routes
   app.get("/api/users/pending", authenticateToken, requireRole(['manager', 'owner']), async (req, res) => {
     try {

@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import RoleSelector from "@/pages/role-selector";
 import EmployeeOnboarding from "@/pages/employee-onboarding";
+import VolunteerOnboarding from "@/pages/volunteer-onboarding";
 import EmployeeHandbook from "@/pages/employee-handbook";
 import SopSystem from "@/pages/sop-system";
 import ManagerDashboard from "@/pages/manager-dashboard";
@@ -17,6 +18,7 @@ function Router() {
     <Switch>
       <Route path="/" component={RoleSelector} />
       <Route path="/employee/onboarding" component={EmployeeOnboarding} />
+      <Route path="/volunteer/onboarding" component={VolunteerOnboarding} />
       <Route path="/employee/handbook" component={EmployeeHandbook} />
       <Route path="/employee/sops" component={SopSystem} />
       <Route path="/manager/dashboard" component={ManagerDashboard} />
