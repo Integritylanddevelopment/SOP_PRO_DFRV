@@ -72,6 +72,14 @@ export interface IStorage {
   getUserNotifications(userId: string): Promise<Notification[]>;
   createNotification(notification: InsertNotification): Promise<Notification>;
   markNotificationRead(id: string): Promise<Notification>;
+
+  // AI Features (simplified for now)
+  createAiInteraction?(data: any): Promise<any>;
+  getAiInteractions?(companyId: string, userId: string): Promise<any[]>;
+  createCrossRoleMessage?(data: any): Promise<any>;
+  getCrossRoleMessages?(companyId: string, userRole: string): Promise<any[]>;
+  createDashboardConfig?(data: any): Promise<any>;
+  createAiFeature?(data: any): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -319,6 +327,31 @@ export class DatabaseStorage implements IStorage {
       .where(eq(notifications.id, id))
       .returning();
     return updatedNotification;
+  }
+
+  // AI Features - Basic implementations
+  async createAiInteraction(data: any): Promise<any> {
+    return { id: Date.now().toString(), ...data };
+  }
+
+  async getAiInteractions(companyId: string, userId: string): Promise<any[]> {
+    return [];
+  }
+
+  async createCrossRoleMessage(data: any): Promise<any> {
+    return { id: Date.now().toString(), ...data };
+  }
+
+  async getCrossRoleMessages(companyId: string, userRole: string): Promise<any[]> {
+    return [];
+  }
+
+  async createDashboardConfig(data: any): Promise<any> {
+    return { id: Date.now().toString(), ...data };
+  }
+
+  async createAiFeature(data: any): Promise<any> {
+    return { id: Date.now().toString(), ...data };
   }
 }
 

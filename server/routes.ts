@@ -507,6 +507,147 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Interactions Routes
+  app.post('/api/ai-interactions', authenticateToken, async (req: Request, res: Response) => {
+    try {
+      const user = getAuthenticatedUser(req);
+      const { message, userRole, context } = req.body;
+
+      // Simple AI response generation (would integrate with Anthropic in production)
+      const aiResponse = await generateAIResponse(message, userRole, context, user);
+      
+      res.json({
+        id: Date.now().toString(),
+        response: aiResponse.response,
+        actionType: aiResponse.actionType || 'none',
+        actionData: aiResponse.actionData
+      });
+    } catch (error) {
+      console.error('AI interaction error:', error);
+      res.status(500).json({ message: 'Failed to process AI interaction' });
+    }
+  });
+
+  // Cross-role messaging routes
+  app.post('/api/cross-role-messages', authenticateToken, async (req: Request, res: Response) => {
+    try {
+      const user = getAuthenticatedUser(req);
+      
+      // For now, just return success - would integrate with database
+      res.json({ success: true, id: Date.now().toString() });
+    } catch (error) {
+      console.error('Cross-role message error:', error);
+      res.status(500).json({ message: 'Failed to create message' });
+    }
+  });
+
+  // AI Response Generation Function
+  async function generateAIResponse(message: string, userRole: string, context: any, user: User) {
+    let response = '';
+    let actionType = 'none';
+    let actionData = {};
+
+    const lowerMessage = message.toLowerCase();
+
+    if (lowerMessage.includes('create task') || lowerMessage.includes('assign task')) {
+      if (userRole === 'manager' || userRole === 'owner') {
+        actionType = 'create_task';
+        response = "I'll create that task for your team. Let me set it up with the details you've provided.";
+        actionData = {
+          title: extractTaskTitle(message),
+          description: message,
+          priority: 'normal',
+          dueDate: extractDueDate(message)
+        };
+      }
+    } else if (lowerMessage.includes('send message') || lowerMessage.includes('notify')) {
+      actionType = 'create_message';
+      response = "I'll send that message to your team right away.";
+      actionData = {
+        targetRole: 'employee',
+        messageType: 'announcement',
+        title: 'Message from ' + userRole,
+        content: message
+      };
+    } else if (lowerMessage.includes('reorganize') || lowerMessage.includes('dashboard')) {
+      actionType = 'dashboard_reorganize';
+      response = "I'll reorganize your dashboard to better suit your needs.";
+      actionData = {
+        targetRole: userRole,
+        layout: generateOptimizedLayout(userRole)
+      };
+    } else if (lowerMessage.includes('implement') || lowerMessage.includes('feature')) {
+      if (userRole === 'owner') {
+        actionType = 'implement_feature';
+        response = "I'll work on implementing that feature. It will be available across the appropriate user roles.";
+        actionData = {
+          name: extractFeatureName(message),
+          type: 'component',
+          description: message,
+          targetRole: 'manager'
+        };
+      }
+    } else {
+      actionType = 'gather_info';
+      response = generateContextualResponse(message, userRole, context);
+    }
+
+    return { response, actionType, actionData };
+  }
+
+  // Helper functions for AI response generation
+  function extractTaskTitle(message: string): string {
+    const words = message.split(' ');
+    const taskIndex = words.findIndex(word => word.toLowerCase().includes('task'));
+    if (taskIndex > -1 && taskIndex < words.length - 1) {
+      return words.slice(taskIndex + 1, taskIndex + 4).join(' ');
+    }
+    return 'New Task';
+  }
+
+  function extractDueDate(message: string): string | null {
+    if (message.includes('tomorrow')) return new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    if (message.includes('today')) return new Date().toISOString();
+    return null;
+  }
+
+  function extractFeatureName(message: string): string {
+    const words = message.split(' ');
+    const featureIndex = words.findIndex(word => word.toLowerCase().includes('feature'));
+    if (featureIndex > -1 && featureIndex < words.length - 1) {
+      return words.slice(featureIndex + 1, featureIndex + 3).join(' ');
+    }
+    return 'New Feature';
+  }
+
+  function generateOptimizedLayout(userRole: string) {
+    const layouts = {
+      owner: {
+        widgets: [
+          { id: '1', type: 'metrics', position: { x: 0, y: 0, w: 6, h: 3 }, config: {} },
+          { id: '2', type: 'properties', position: { x: 6, y: 0, w: 6, h: 3 }, config: {} }
+        ]
+      },
+      manager: {
+        widgets: [
+          { id: '1', type: 'tasks', position: { x: 0, y: 0, w: 6, h: 4 }, config: {} },
+          { id: '2', type: 'team', position: { x: 6, y: 0, w: 6, h: 4 }, config: {} }
+        ]
+      }
+    };
+    return layouts[userRole as keyof typeof layouts] || layouts.manager;
+  }
+
+  function generateContextualResponse(message: string, userRole: string, context: any): string {
+    const responses = {
+      owner: "As a business owner, I can help you analyze performance across all properties, implement new features for your team, and provide strategic insights.",
+      manager: "I can assist with team management, task assignments, performance tracking, and workflow optimization for your department.",
+      employee: "I'm here to help you with your daily tasks, schedule, and any questions about your work responsibilities."
+    };
+    
+    return responses[userRole as keyof typeof responses] || "How can I assist you today?";
+  }
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -267,6 +267,93 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   }),
 }));
 
+// AI Interactions and Cross-Role Communication
+export const aiInteractions = pgTable("ai_interactions", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  companyId: uuid("company_id").references(() => companies.id).notNull(),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  userRole: text("user_role").$type<"employee" | "manager" | "owner">().notNull(),
+  message: text("message").notNull(),
+  response: text("response").notNull(),
+  actionType: text("action_type").$type<"dashboard_reorganize" | "create_task" | "create_message" | "implement_feature" | "gather_info" | "none">(),
+  actionData: jsonb("action_data").$type<{
+    targetRole?: "employee" | "manager" | "owner";
+    targetUserId?: string;
+    taskDetails?: any;
+    featureDetails?: any;
+    dashboardChanges?: any;
+  }>(),
+  status: text("status").$type<"pending" | "completed" | "failed">().default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Dynamic Dashboard Configurations
+export const dashboardConfigs = pgTable("dashboard_configs", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  companyId: uuid("company_id").references(() => companies.id).notNull(),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  userRole: text("user_role").$type<"employee" | "manager" | "owner">().notNull(),
+  layout: jsonb("layout").$type<{
+    widgets: Array<{
+      id: string;
+      type: string;
+      position: { x: number; y: number; w: number; h: number };
+      config: any;
+    }>;
+    theme?: string;
+    customizations?: any;
+  }>().notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdBy: text("created_by").$type<"user" | "ai">().default("user").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// AI-Generated Features
+export const aiFeatures = pgTable("ai_features", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  companyId: uuid("company_id").references(() => companies.id).notNull(),
+  createdBy: uuid("created_by").references(() => users.id).notNull(),
+  createdByRole: text("created_by_role").$type<"manager" | "owner">().notNull(),
+  targetRole: text("target_role").$type<"employee" | "manager" | "owner">().notNull(),
+  featureName: text("feature_name").notNull(),
+  featureType: text("feature_type").$type<"component" | "page" | "workflow" | "automation" | "integration">().notNull(),
+  description: text("description").notNull(),
+  implementation: jsonb("implementation").$type<{
+    code?: string;
+    config?: any;
+    dependencies?: string[];
+    routes?: any[];
+  }>().notNull(),
+  status: text("status").$type<"pending" | "implementing" | "active" | "failed">().default("pending").notNull(),
+  deployedAt: timestamp("deployed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Cross-Role Messages (AI-generated)  
+export const crossRoleMessages = pgTable("cross_role_messages", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  companyId: uuid("company_id").references(() => companies.id).notNull(),
+  fromUserId: uuid("from_user_id").references(() => users.id).notNull(),
+  fromRole: text("from_role").$type<"manager" | "owner">().notNull(),
+  toRole: text("to_role").$type<"employee" | "manager" | "owner">().notNull(),
+  toUserId: uuid("to_user_id").references(() => users.id),
+  messageType: text("message_type").$type<"task_assignment" | "feature_notification" | "system_update" | "reminder" | "announcement">().notNull(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  actionRequired: boolean("action_required").default(false).notNull(),
+  actionData: jsonb("action_data").$type<{
+    taskId?: string;
+    featureId?: string;
+    dueDate?: string;
+    priority?: string;
+  }>(),
+  isRead: boolean("is_read").default(false).notNull(),
+  createdByAI: boolean("created_by_ai").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertCompanySchema = createInsertSchema(companies).omit({
   id: true,
@@ -357,3 +444,39 @@ export type InsertIncident = z.infer<typeof insertIncidentSchema>;
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+
+// AI interaction schemas and types
+export const insertAiInteractionSchema = createInsertSchema(aiInteractions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertDashboardConfigSchema = createInsertSchema(dashboardConfigs).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAiFeatureSchema = createInsertSchema(aiFeatures).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deployedAt: true,
+});
+
+export const insertCrossRoleMessageSchema = createInsertSchema(crossRoleMessages).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type AiInteraction = typeof aiInteractions.$inferSelect;
+export type InsertAiInteraction = z.infer<typeof insertAiInteractionSchema>;
+
+export type DashboardConfig = typeof dashboardConfigs.$inferSelect;
+export type InsertDashboardConfig = z.infer<typeof insertDashboardConfigSchema>;
+
+export type AiFeature = typeof aiFeatures.$inferSelect;
+export type InsertAiFeature = z.infer<typeof insertAiFeatureSchema>;
+
+export type CrossRoleMessage = typeof crossRoleMessages.$inferSelect;
+export type InsertCrossRoleMessage = z.infer<typeof insertCrossRoleMessageSchema>;
